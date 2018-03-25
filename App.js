@@ -16,6 +16,9 @@ import {
 import Routes from './components/Routes'
 import Navigator from './components/navigator'
 import { Provider } from 'react-redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
+import * as actionCreators  from './AppActionCreator'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -27,15 +30,22 @@ const instructions = Platform.select({
 
 type Props = {};
 
-export default class App extends Component<Props> {
+class App extends Component<Props> {
   render() {
+    console.log(this.props);
     return (
       <View style={styles.container}>
-        <Routes />
+        <Routes { ...this.props} />
       </View>
     );
   }
 }
+
+const mapDispatchToProps = (dispatch: Function) => bindActionCreators({
+  ...actionCreators
+}, dispatch)
+
+export default connect(null, mapDispatchToProps)(App)
 
 const styles = StyleSheet.create({
   container: {

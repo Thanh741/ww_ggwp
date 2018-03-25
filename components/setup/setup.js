@@ -67,31 +67,26 @@ class SetUp extends Component {
     this.setPlayerNames = this.setPlayerNames.bind(this)
   }
   setPlayerNumber(number) {
-    console.log(number);
     this.setState({
       playerNumber: number
     })
   }
   setRoles(roles) {
-    let currentRoles = this.state.roles;
+    let currentRoles = this.props.roles;
     currentRoles = currentRoles.map((role) => {
       if (role.name == roles) {
         role.active = !role.active
       }
       return role
     })
-    currentRoles
-    this.setState({
-      roles: currentRoles
-    })
+    this.props.updateRoles(currentRoles)
   }
   setPlayerNames(value) {
     const playerLength = value.trim().split(',').filter((item) => !!item).length
     this.setState({
-      playerNames: value,
       playerLength
     })
-
+    this.props.updatePlayerNames(value)
   }
   render() {
     return (
@@ -100,18 +95,18 @@ class SetUp extends Component {
           <TextNumber>Players Numbers</TextNumber>
           <ListPickers>
             {[7, 8, 9, 10, 11, 12].map((i) =>
-              i == this.state.playerNumber ?
+              i == this.props.playerNumber ?
               <PlayersNumber
                 active
                 key={i}
-                onPress={()=> {this.setPlayerNumber(i)}}
+                onPress={()=> {this.props.updatePlayerNumber(i)}}
                 >
                 <PlayerNumberText active>{i}</PlayerNumberText>
               </PlayersNumber>
             :
               <PlayersNumber
                 key={i}
-                onPress={()=> {this.setPlayerNumber(i)}}
+                onPress={()=> {this.props.updatePlayerNumber(i)}}
                 >
                 <PlayerNumberText>{i}</PlayerNumberText>
               </PlayersNumber>
@@ -119,7 +114,7 @@ class SetUp extends Component {
           </ListPickers>
           <TextNumber>Bonus Characters</TextNumber>
           <ListPickers>
-            {this.state.roles.map((i) =>
+            {this.props.roles.map((i) =>
               <PlayersNumber
                 key={i.name}
                 onPress={()=> {this.setRoles(i.name)}}
@@ -138,7 +133,7 @@ class SetUp extends Component {
             placeholder={'Alex, Bella, Charles, ...'}
             placeholderColor={color.black}
             onChangeText={this.setPlayerNames}
-            value={this.state.playerNames}
+            value={this.props.playerNames}
           />
         </TextContainer>
       </SetUpView>

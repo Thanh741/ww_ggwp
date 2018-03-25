@@ -1,15 +1,33 @@
 import { connect } from 'react-redux';
-import setupComponent from '../setup';
+import setupComponent from './setup';
 
 
-const mapStateToProps = (state: Object) => getWeatherSelector(state);
+const mapStateToProps = (state: Object) => ({
+  roles: state.rules.roles,
+  playerNames: state.rules.playerNames,
+  playerNumber: state.rules.playerNumber
+})
 
 const mapDispatchToProps = (dispatch: Function) => ({
-  // fetchData: () => dispatch(fetchData()),
-  updateSetupRule: (rule) => dispatch({
-    type: 'SAVE_PLAYER_NUMBER',
-    payload: rule
-  })
+  updatePlayerNumber: (playerNumber) => {
+    dispatch({
+      type: 'UPDATE_PLAYER_NUMBER',
+      payload: playerNumber
+    })
+  },
+  updatePlayerNames: (playerNames) => {
+    dispatch({
+      type: 'UPDATE_PLAYER_NAMES',
+      payload: playerNames
+    })
+  },
+  updateRoles: (roles) => {
+    console.log('roles', roles);
+    dispatch({
+      type: 'UPDATE_PLAYER_ROLES',
+      payload: roles
+    })
+  }
 });
 
 export default connect(

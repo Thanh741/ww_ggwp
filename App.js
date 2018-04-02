@@ -32,7 +32,6 @@ type Props = {};
 
 class App extends Component<Props> {
   render() {
-    console.log(this.props);
     return (
       <View style={styles.container}>
         <Routes { ...this.props} />

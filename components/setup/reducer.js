@@ -9,7 +9,6 @@ const setupReducer = (state = initialState, action) => {
     case 'UPDATE_PLAYER_NUMBER':
       return { ...state, playerNumber: action.payload}
     case 'UPDATE_PLAYER_NAMES':
-      console.log(action.payload);
       return { ...state, playerNames: action.payload}
     case 'UPDATE_PLAYER_ROLES':
       return { ...state, roles: action.payload}

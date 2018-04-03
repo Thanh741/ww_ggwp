@@ -69,7 +69,7 @@ class Games extends React.Component {
     </View>
   }
   renderSeerPhase() {
-    const { currentDay, currentShift, days, seeHim} = this.props
+    const { currentDay, currentShift, days, checkRoleOfHim} = this.props
 
     return
      <View>
@@ -77,7 +77,7 @@ class Games extends React.Component {
          toDay.survivors.map((survivor) => {
           <View>
             <Text>{survivor.name}</Text>
-            <Button title="Predict" onPress={seeHim}>
+            <Button title="Predict" onPress={checkRoleOfHim}>
           </View>
          })
        }
@@ -110,8 +110,6 @@ class Games extends React.Component {
               }
            </View>
         }
-
-
       </GameView>
     )
 

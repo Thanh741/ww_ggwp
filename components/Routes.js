@@ -56,7 +56,7 @@ const Routes = (props) => (
                console.log('next');
                props.randomRoles()
                Actions.pop()
-               // Actions.push('assigning')
+               Actions.push('assigning')
              } else {
                alert(result.message)
              }

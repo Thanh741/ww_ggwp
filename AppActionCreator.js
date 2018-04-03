@@ -17,10 +17,10 @@ export const randomRoles = () => (dispatch, getState) => {
   const villagerNo = rules.playerNumber - wereWolfNo - extendRoles.length
 
   let wereWolf = []
-  for(let i = 0; i < wereWolfNo; i++) { wereWolf.push('werewolf')}
+  for(let i = 0; i < wereWolfNo; i++) { wereWolf.push('Werewolf')}
 
   let villagers = []
-  for(let i = 0; i < villagerNo; i++) { villagers.push('villager')}
+  for(let i = 0; i < villagerNo; i++) { villagers.push('Villager')}
 
   const allRoles =  wereWolf.concat(villagers, extendRoles)
   let randomArray = []

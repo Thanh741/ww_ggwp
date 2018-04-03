@@ -5,7 +5,8 @@ import { bindActionCreators } from 'redux'
 const mapStateToProps = (state: Object) => ({
     currentDay: state.game.currentDay,
     currentShift: state.game.currentShift,
-    days: state.game.days
+    days: state.game.days,
+    order: state.game.order
 })
 
 const mapDispatchToProps = (dispatch: Function) => bindActionCreators({

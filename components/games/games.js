@@ -11,7 +11,10 @@ const RulesView = styled.View`
 const GameView = styled.View`
 
 `
-
+const  ViewContainer = styled.View`
+  display: flex;
+  flex-direction: row;
+`
 
 class Games extends React.Component {
   constructor() {
@@ -24,73 +27,87 @@ class Games extends React.Component {
   }
   renderWerewolfPhase(today) {
     console.log('werewolf');
-    const { currentDay, currentShift, days, killHim } = this.props
-
-    return
-  <View>
-    {
-      today.survivors.map((survivor, index) => {
-        <View key={survivor.name}>
-          <Text>{survivor.name}</Text>
-          <Button title="KIll" onPress={killHim} />
-        </View>
-      })
-    }
-  </View>
-
+    const { currentDay, currentShift, days, killByWerewolf } = this.props
+    return (
+      <ViewContainer>
+        {
+          today.survivors.map((survivor, index) => {
+            console.log(survivor);
+            return (
+              <View key={survivor.name}>
+                <Text>{survivor.name}</Text>
+                <Button title="KIll" onPress={killByWerewolf.bind(survivor.name)} />
+              </View>
+            )
+          })
+        }
+      </ViewContainer>
+    )
   }
   renderWitchPhase(today) {
-    const { currentDay, currentShift, days, witchSaveHime, witchKillHim} = this.props
+    const { currentDay, currentShift, days, saveByWitch, killByWitch} = this.props
 
-    return
-     <View>
-       {
-         today.survivors.filter(survivor => survivor.status.includes('dead')).map((survivor) => {
-          <View>
-            <Text>{survivor.name}</Text>
-            <Button title="Save" onPress={witchSaveHime} />
-          </View>
-         })
-       }
-       {
-         today.survivors.map((survivor) => {
-          <View>
-            <Text>{survivor.name}</Text>
-            <Button title="Kill" onPress={witchKillHim} />
-          </View>
-         })
-       }
-    </View>
+    return (
+      <View>
+        {
+          today.survivors.filter(survivor => survivor.status.includes('dead')).map((survivor) => {
+           return (
+             <View>
+               <Text>{survivor.name}</Text>
+               <Button title="Save" onPress={saveByWitch.bind(survivor.name)} />
+             </View>
+           )
+          })
+        }
+        {
+          today.survivors.map((survivor) => {
+           return (
+             <View>
+               <Text>{survivor.name}</Text>
+               <Button title="Kill" onPress={killByWitch.bind(survivor.name)} />
+             </View>)
+          })
+        }
+     </View>
+    )
   }
+
   renderDoctorPhase(today) {
-    const { currentDay, currentShift, days, protectHim} = this.props
-
-    return
-     <View>
-       {
-         today.survivors.map((survivor) => {
-          <View>
-            <Text>{survivor.name}</Text>
-            <Button title="Protect" onPress={protectHim} />
-          </View>
-         })
-       }
-    </View>
+    const { currentDay, currentShift, days, healByDoctor} = this.props
+    return (
+      <View>
+        {
+          today.survivors.map((survivor) => {
+           return (
+             <View>
+               <Text>{survivor.name}</Text>
+               <Button title="Protect" onPress={healByDoctor.bind(survivor.name)} />
+             </View>
+           )
+          })
+        }
+     </View>
+    )
   }
-  renderSeerPhase() {
-    const { currentDay, currentShift, days, checkRoleOfHim} = this.props
 
-    return
-     <View>
-       {
-         today.survivors.map((survivor) => {
-          <View>
-            <Text>{survivor.name}</Text>
-            <Button title="Predict" onPress={checkRoleOfHim} />
-          </View>
-         })
-       }
-    </View>
+  renderSeerPhase(today) {
+    const { currentDay, currentShift, days, seeBySeer} = this.props
+
+    return (
+      <View>
+        {
+          today.survivors.map((survivor) => {
+            return (
+              <View>
+                <Text>{survivor.name}</Text>
+                <Button title="Predict" onPress={seeBySeer.bind(survivor.name)} />
+              </View>
+            )
+          })
+        }
+     </View>
+    )
+
   }
   renderPhase(today) {
     switch (this.props.order) {
@@ -98,7 +115,7 @@ class Games extends React.Component {
       case 1: return this.renderWitchPhase(today)
       case 2: return this.renderDoctorPhase(today)
       case 3: return this.renderSeerPhase(today)
-      default: return ''
+      default: return <View></View>
       }
   }
   render() {

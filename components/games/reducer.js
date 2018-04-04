@@ -25,12 +25,14 @@ const initialState = {
 
 const gameReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'INIT_FIRST_DAY':
+      return  {...state, days: action.payload}
+    case 'NEXT_ORDER':
+      return {...state, order: action.payload}
     case 'WEREWOLF_KILL':
       return {...state, days: action.payload}
-    case 'NEXT_DAY':
-      return state
-    case 'INIT_FIRST_DAY':
-      return  {...state, days: [action.payload]}
+    case 'CHANGE_SHIFT':
+      return {...state, currentShift: action.payload}
     default:
       return state
   }

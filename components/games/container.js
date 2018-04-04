@@ -1,6 +1,7 @@
 import Games from './games'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
+import * as gameActionCreators from './actionCreators'
 
 const mapStateToProps = (state: Object) => ({
     currentDay: state.game.currentDay,
@@ -10,7 +11,7 @@ const mapStateToProps = (state: Object) => ({
 })
 
 const mapDispatchToProps = (dispatch: Function) => bindActionCreators({
-
+  ...gameActionCreators
 }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Games);

@@ -19,7 +19,7 @@ export const nextPlayer = () => (dispatch, getState) => {
         }
     dispatch({
       type: 'INIT_FIRST_DAY',
-      payload: firstDay
+      payload: [firstDay]
     })
     Actions.push('game')
   }

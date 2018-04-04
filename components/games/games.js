@@ -20,49 +20,58 @@ class Games extends React.Component {
     this.renderWitchPhase = this.renderWitchPhase.bind(this)
     this.renderDoctorPhase = this.renderDoctorPhase.bind(this)
     this.renderWerewolfPhase = this.renderWerewolfPhase.bind(this)
+    this.renderPhase = this.renderPhase.bind(this)
   }
   renderWerewolfPhase(today) {
+    console.log('werewolf');
     const { currentDay, currentShift, days, killHim } = this.props
 
-    return toDay.survivors.map((survivor, index) => {
-      <View key={survivor.name}>
-        <Text>{survivor.name}</Text><Button title="KIll" onPress={killHim}>
-      </View>
-    })
+    return
+  <View>
+    {
+      today.survivors.map((survivor, index) => {
+        <View key={survivor.name}>
+          <Text>{survivor.name}</Text>
+          <Button title="KIll" onPress={killHim} />
+        </View>
+      })
+    }
+  </View>
+
   }
-  renderWitchPhase(toDay) {
+  renderWitchPhase(today) {
     const { currentDay, currentShift, days, witchSaveHime, witchKillHim} = this.props
 
     return
      <View>
        {
-         toDay.survivors.filter(survivor => survivor.status.includes('dead')).map((survivor) => {
+         today.survivors.filter(survivor => survivor.status.includes('dead')).map((survivor) => {
           <View>
             <Text>{survivor.name}</Text>
-            <Button title="Save" onPress={witchSaveHime}>
+            <Button title="Save" onPress={witchSaveHime} />
           </View>
          })
        }
        {
-         toDay.survivors.map((survivor) => {
+         today.survivors.map((survivor) => {
           <View>
             <Text>{survivor.name}</Text>
-            <Button title="Kill" onPress={witchKillHim}>
+            <Button title="Kill" onPress={witchKillHim} />
           </View>
          })
        }
     </View>
   }
-  renderDoctorPhase(toDay) {
+  renderDoctorPhase(today) {
     const { currentDay, currentShift, days, protectHim} = this.props
 
     return
      <View>
        {
-         toDay.survivors.map((survivor) => {
+         today.survivors.map((survivor) => {
           <View>
             <Text>{survivor.name}</Text>
-            <Button title="Protect" onPress={protectHim}>
+            <Button title="Protect" onPress={protectHim} />
           </View>
          })
        }
@@ -74,40 +83,45 @@ class Games extends React.Component {
     return
      <View>
        {
-         toDay.survivors.map((survivor) => {
+         today.survivors.map((survivor) => {
           <View>
             <Text>{survivor.name}</Text>
-            <Button title="Predict" onPress={checkRoleOfHim}>
+            <Button title="Predict" onPress={checkRoleOfHim} />
           </View>
          })
        }
     </View>
   }
+  renderPhase(today) {
+    switch (this.props.order) {
+      case 0: return this.renderWerewolfPhase(today)
+      case 1: return this.renderWitchPhase(today)
+      case 2: return this.renderDoctorPhase(today)
+      case 3: return this.renderSeerPhase(today)
+      default: return ''
+      }
+  }
   render() {
     const { currentDay, currentShift, days } = this.props
-    const toDay = days.filter(i => i.day === currentDay)
+    const today = days.filter(i => i.day === currentDay)[0]
+    console.log(today);
     return (
       <GameView>
         {
            currentShift  ?
            <View>
-              <Text>{currentDay}</Text>
-              <Text>{currentShift}</Text>
-              <Text>{game.numberSurvivor}</Text>
+              <Text>Current day{currentDay}</Text>
+              <Text>Shift: {currentShift ? 'Day' : 'Night'}</Text>
+              <Text>{today.survivorsAmount}</Text>
            </View> :
            <View>
               <Text>{currentDay}</Text>
               <Text>{currentShift}</Text>
-              <Text>{game.numberSurvivor}</Text>
+              <Text>{today.survivorsAmount}</Text>
               {
-                switch (this.props.order) {
-                  case 0: return renderWerewolfPhase(toDay)
-                  case 1: return renderWitchPhase(toDay)
-                  case 2: return renderDoctorPhase(toDay)
-                  case 3: return renderSeerPhase(toDay)
-                  default: return ''
-                }
+                this.renderPhase(today)
               }
+              <Button onPress={() => {this.props.nextOrder()}} title="NEXT" />
            </View>
         }
       </GameView>

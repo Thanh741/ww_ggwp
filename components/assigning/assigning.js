@@ -39,7 +39,6 @@ class Assigning extends React.Component {
             title="SHOW"
             onPress={() => {this.setState({showRole: true})}}
           />
-
         }
       </View>
     )

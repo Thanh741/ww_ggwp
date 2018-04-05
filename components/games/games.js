@@ -133,7 +133,7 @@ class Games extends React.Component {
            </View> :
            <View>
               <Text>{currentDay}</Text>
-              <Text>{currentShift}</Text>
+              <Text>{currentShift ? 'Day' : 'Night'}</Text>
               <Text>{today.survivorsAmount}</Text>
               {
                 this.renderPhase(today)

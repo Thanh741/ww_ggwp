@@ -14,7 +14,7 @@ export const nextPlayer = () => (dispatch, getState) => {
           shift: 0,
           survivorsAmount: players.length,
           survivors: players.map((player) => {
-            return {...player, status: [0]}
+            return {...player, status: []}
           })
         }
     dispatch({

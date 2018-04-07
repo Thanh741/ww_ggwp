@@ -7,7 +7,10 @@ const mapStateToProps = (state: Object) => ({
     currentDay: state.game.currentDay,
     currentShift: state.game.currentShift,
     days: state.game.days,
-    order: state.game.order
+    order: state.game.order,
+    clock: state.game.clock,
+    discussion: state.game.discussion,
+    killingDiscussion: state.game.killingDiscussion
 })
 
 const mapDispatchToProps = (dispatch: Function) => bindActionCreators({

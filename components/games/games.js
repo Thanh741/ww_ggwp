@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, Image, TextInput, Dimensions, Button } from 'react-native';
 import styled from 'styled-components'
+import Clock from '../util/clock.js'
 
 const RulesView = styled.View`
   flex: 1;
@@ -24,19 +25,24 @@ class Games extends React.Component {
     this.renderDoctorPhase = this.renderDoctorPhase.bind(this)
     this.renderWerewolfPhase = this.renderWerewolfPhase.bind(this)
     this.renderPhase = this.renderPhase.bind(this)
+    this.renderStatus = this.renderStatus.bind(this)
+    this.renderWhoWillDie = this.renderWhoWillDie.bind(this)
   }
+
   renderWerewolfPhase(today) {
-    console.log('werewolf');
     const { currentDay, currentShift, days, killByWerewolf } = this.props
     return (
       <ViewContainer>
+        <View>
+          <Text>WEREWOLF</Text>
+        </View>
         {
           today.survivors.map((survivor, index) => {
             console.log(survivor);
             return (
               <View key={survivor.name}>
                 <Text>{survivor.name}</Text>
-                <Button title="KIll" onPress={killByWerewolf.bind(survivor.name)} />
+                <Button title="KIll" onPress={killByWerewolf.bind('', survivor.name)} />
               </View>
             )
           })
@@ -44,17 +50,21 @@ class Games extends React.Component {
       </ViewContainer>
     )
   }
+
   renderWitchPhase(today) {
     const { currentDay, currentShift, days, saveByWitch, killByWitch} = this.props
 
     return (
       <View>
+        <View>
+          <Text>WITCH</Text>
+        </View>
         {
-          today.survivors.filter(survivor => survivor.status.includes('dead')).map((survivor) => {
+          today.survivors.filter(survivor => (survivor.status.indexOf('deadByWerewolf') > -1)).map((survivor) => {
            return (
              <View>
                <Text>{survivor.name}</Text>
-               <Button title="Save" onPress={saveByWitch.bind(survivor.name)} />
+               <Button title="Save" onPress={saveByWitch.bind('', survivor.name)} />
              </View>
            )
           })
@@ -64,51 +74,54 @@ class Games extends React.Component {
            return (
              <View>
                <Text>{survivor.name}</Text>
-               <Button title="Kill" onPress={killByWitch.bind(survivor.name)} />
+               <Button title="Kill" onPress={killByWitch.bind('', survivor.name)} />
              </View>)
           })
         }
      </View>
-    )
-  }
+    )}
 
   renderDoctorPhase(today) {
     const { currentDay, currentShift, days, healByDoctor} = this.props
     return (
       <View>
+        <View>
+          <Text>DOCTOR</Text>
+        </View>
         {
           today.survivors.map((survivor) => {
            return (
              <View>
                <Text>{survivor.name}</Text>
-               <Button title="Protect" onPress={healByDoctor.bind(survivor.name)} />
+               <Button title="Protect" onPress={healByDoctor.bind('', survivor.name)} />
              </View>
            )
           })
         }
      </View>
-    )
-  }
+    )}
 
   renderSeerPhase(today) {
     const { currentDay, currentShift, days, seeBySeer} = this.props
 
     return (
       <View>
+        <View>
+          <Text>SEER</Text>
+        </View>
         {
           today.survivors.map((survivor) => {
             return (
               <View>
                 <Text>{survivor.name}</Text>
-                <Button title="Predict" onPress={seeBySeer.bind(survivor.name)} />
+                <Button title="Predict" onPress={seeBySeer.bind('', survivor.name)} />
               </View>
             )
           })
         }
      </View>
-    )
+    )}
 
-  }
   renderPhase(today) {
     switch (this.props.order) {
       case 0: return this.renderWerewolfPhase(today)
@@ -118,27 +131,48 @@ class Games extends React.Component {
       default: return <View></View>
       }
   }
+
+  renderStatus() {
+    const { days, currentDay } = this.props
+    const yesterday = days.filter(i => i.day === (currentDay - 1))[0]
+    const survivor =  yesterday.survivors.filter(survivor => this.props.checkStatus(survivor.status)).map((one) => {
+      return <View><Text>{one.name}</Text></View>
+    })
+    return survivor || ''
+  }
+
+  renderWhoWillDie(today) {
+    return today.survivors.map((survivor) => {
+      <View>
+        <Text>
+          {survivor.name}
+        </Text>
+        <Button title="DIE" onPress={this.props.killByPeople('', survivor.name)}/>
+      </View>
+    })
+  }
+
   render() {
-    const { currentDay, currentShift, days } = this.props
+    const { currentDay, currentShift, days = [], discussion, killingDiscussion } = this.props
     const today = days.filter(i => i.day === currentDay)[0]
-    console.log(today);
     return (
       <GameView>
+        <Text>It is day {currentDay} on {currentShift ? 'Day' : 'Night'} </Text>
+        <Text>There are {today.survivorsAmount} survivors left</Text>
         {
            currentShift  ?
            <View>
-              <Text>Current day{currentDay}</Text>
-              <Text>Shift: {currentShift ? 'Day' : 'Night'}</Text>
-              <Text>{today.survivorsAmount}</Text>
+              <View>
+                <Text>WHO DIES LAST NIGHT: </Text>
+              </View>
+              {this.renderStatus()}
+
+              {discussion ? <Clock data={clock} changeShift={this.props.changeShift} /> : <View></View>}
+              {killingDiscussion ? this.renderWhoWillDie(today) : <View></View>}
+
            </View> :
            <View>
-              <Text>{currentDay}</Text>
-              <Text>{currentShift ? 'Day' : 'Night'}</Text>
-              <Text>{today.survivorsAmount}</Text>
-              {
-                this.renderPhase(today)
-              }
-              <Button onPress={() => {this.props.nextOrder()}} title="NEXT" />
+              {this.renderPhase(today)}
            </View>
         }
       </GameView>

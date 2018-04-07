@@ -6,21 +6,14 @@
 const initialState = {
   currentDay: 1,
   currentShift: 0,
-  days: [
-    {
-      day: 1,
-      shift: 0,
-      survivorsAmount: 7,
-      survivors: [
-        {
-          name: '',
-          status: [],
-          role: ''
-        }
-      ]
-    }
-  ],
-  order: 0
+  days: [],
+  order: 0,
+  clock: {
+    minutes: 2,
+    seconds: 30
+  },
+  killingDiscussion: false,
+  discussion: false
 }
 
 const gameReducer = (state = initialState, action) => {
@@ -31,8 +24,28 @@ const gameReducer = (state = initialState, action) => {
       return {...state, order: action.payload}
     case 'WEREWOLF_KILL':
       return {...state, days: action.payload}
+    case 'DOCTOR_HEAL':
+      return {...state, days: action.payload}
+    case 'WITCH_KILL':
+      return {...state, days: action.payload}
+    case 'WITCH_SAVE':
+      return {...state, days: action.payload}
+    case 'PEOPLE_KILL':
+        return {...state, days: action.payload}
     case 'CHANGE_SHIFT':
       return {...state, currentShift: action.payload}
+    case 'SEER_SEE':
+      return {...state, currentShift: action.payload}
+    case 'NEXT_DAY':
+      return {
+        ...state,
+        currentDay: action.payload.currentDay,
+        currentShift: action.payload.currentShift,
+        days: action.payload.days,
+        order: action.payload.order,
+        discussion: false,
+        killingDiscussion: false
+      }
     default:
       return state
   }

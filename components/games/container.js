@@ -14,7 +14,8 @@ const mapStateToProps = (state: Object) => ({
     callOrder: state.game.callOrder,
     witchUseSave: state.game.witchUseSave,
     witchUseKill: state.game.witchUseKill,
-    healedYesterday: state.game.healedYesterday
+    healedYesterday: state.game.healedYesterday,
+    players: state.assigning.players
 })
 
 const mapDispatchToProps = (dispatch: Function) => bindActionCreators({

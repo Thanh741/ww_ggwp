@@ -38,11 +38,13 @@ class Games extends React.Component {
     }
 
     renderWerewolfPhase(today) {
-        const {currentDay, currentShift, days, killByWerewolf} = this.props
+        const {currentDay, currentShift, days, killByWerewolf, players} = this.props
+        const wereWolfNames = players.filter(player => player.role == 'Werewolf').map(player => <Text>{player.name}</Text>)
         return (
             <ViewContainer>
                 <View>
-                    <Text>WEREWOLF</Text>
+                    <Text>WEREWOLF : </Text>
+                    {wereWolfNames}
                 </View>
                 {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor, index) => {
                     if (survivor.status === 'deadByPeople')
@@ -62,13 +64,15 @@ class Games extends React.Component {
     }
 
     renderWitchPhase(today) {
-        const {currentDay, currentShift, days, saveByWitch, killByWitch, witchUseSave, witchUseKill} = this.props
+        const {currentDay, currentShift, days, saveByWitch, killByWitch, witchUseSave, witchUseKill, players} = this.props
+        const witchNames = players.filter(player => player.role == 'Witch').map(player => <Text>{player.name}</Text>)
         const witch = findPersonByRole('Witch', days, currentDay)[0]
         const witchIsAlive = witch && !checkDeadByPeople(witch.status)
         return (
             <View>
                 <View>
                     <Text>WITCH: </Text>
+                    {witchNames}
                 </View>
                 <View>
                     {
@@ -114,13 +118,15 @@ class Games extends React.Component {
     }
 
     renderDoctorPhase(today) {
-        const {currentDay, currentShift, days, healByDoctor, healedYesterday} = this.props
+        const {currentDay, currentShift, days, healByDoctor, healedYesterday, players} = this.props
+        const doctorNames = players.filter(player => player.role == 'Doctor').map(player => <Text>{player.name}</Text>)
         const doctor = findPersonByRole('Doctor', days, currentDay)[0]
         const doctorIsAlive = doctor && !checkDeadByPeople(doctor.status)
         return (
             <View>
                 <View>
                     <Text>DOCTOR : </Text>
+                    {doctorNames}
                 </View>
                 <View>
                     {doctorIsAlive
@@ -147,13 +153,15 @@ class Games extends React.Component {
     }
 
     renderSeerPhase(today) {
-        const {currentDay, currentShift, days, seeBySeer} = this.props
+        const {currentDay, currentShift, days, seeBySeer, players} = this.props
+        const seerNames = players.filter(player => player.role == 'Seer').map(player => <Text>{player.name}</Text>)
         const seer = findPersonByRole('Seer', days, currentDay)[0]
         const seerIsAlive = seer && !checkDeadByPeople(seer.status)
         return (
             <View>
                 <View>
                     <Text>SEER:</Text>
+                    {seerNames}
                 </View>
                 <View>
                     {seerIsAlive

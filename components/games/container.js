@@ -11,7 +11,9 @@ const mapStateToProps = (state: Object) => ({
     clock: state.game.clock,
     discussion: state.game.discussion,
     killingDiscussion: state.game.killingDiscussion,
-    callOrder: state.game.callOrder
+    callOrder: state.game.callOrder,
+    witchUseSave: state.game.witchUseSave,
+    witchUseKill: state.game.witchUseKill
 })
 
 const mapDispatchToProps = (dispatch: Function) => bindActionCreators({

@@ -64,11 +64,11 @@ class Games extends React.Component {
     renderWitchPhase(today) {
         const {currentDay, currentShift, days, saveByWitch, killByWitch, witchUseSave, witchUseKill} = this.props
         const witch = findPersonByRole('Witch', days, currentDay)[0]
-        const witchIsAlive = !checkDeadStatus(witch.status)
+        const witchIsAlive = witch && !checkDeadByPeople(witch.status)
         return (
             <View>
                 <View>
-                    <Text>WITCH: {witch.name}</Text>
+                    <Text>WITCH: </Text>
                 </View>
                 <View>
                     {
@@ -103,7 +103,7 @@ class Games extends React.Component {
                           })
                         }
                       </View> :
-                      <View></View>
+                      <View><Text>DEAD</Text></View>
                     }
                    <View>
                         <Button title="Next Role" onPress={this.props.nextOrder}/>
@@ -114,13 +114,13 @@ class Games extends React.Component {
     }
 
     renderDoctorPhase(today) {
-        const {currentDay, currentShift, days, healByDoctor} = this.props
+        const {currentDay, currentShift, days, healByDoctor, healedYesterday} = this.props
         const doctor = findPersonByRole('Doctor', days, currentDay)[0]
-        const doctorIsAlive = !checkDeadStatus(doctor.status)
+        const doctorIsAlive = doctor && !checkDeadByPeople(doctor.status)
         return (
             <View>
                 <View>
-                    <Text>DOCTOR : {doctor.name}</Text>
+                    <Text>DOCTOR : </Text>
                 </View>
                 <View>
                     {doctorIsAlive
@@ -130,7 +130,7 @@ class Games extends React.Component {
                                     return (
                                         <View key={survivor.name}>
                                             <Text>{survivor.name}</Text>
-                                            <Button title="Protect" onPress={healByDoctor.bind('', survivor.name)}/>
+                                            {healedYesterday === survivor.name ? <View></View> : <Button title="Protect" onPress={healByDoctor.bind('', survivor.name)}/>}
                                         </View>
                                     )
                                 })
@@ -148,12 +148,12 @@ class Games extends React.Component {
 
     renderSeerPhase(today) {
         const {currentDay, currentShift, days, seeBySeer} = this.props
-        const seer = findPersonByRole('Doctor', days, currentDay)[0]
-        const seerIsAlive = !checkDeadStatus(seer.status)
+        const seer = findPersonByRole('Seer', days, currentDay)[0]
+        const seerIsAlive = seer && !checkDeadByPeople(seer.status)
         return (
             <View>
                 <View>
-                    <Text>SEER: {seer.name}</Text>
+                    <Text>SEER:</Text>
                 </View>
                 <View>
                     {seerIsAlive
@@ -170,7 +170,7 @@ class Games extends React.Component {
                                     </View>
                                 )
                             })}
-                      </View> : <View></View>
+                      </View> : <View><Text>DEAD</Text></View>
                     }
                    <View>
                         <Button title="Next Role" onPress={this.props.nextOrder}/>
@@ -205,7 +205,7 @@ class Games extends React.Component {
                 <Text>{one.name}</Text>
             </View>
         })
-        return survivor || ''
+        return survivor || 'no one'
     }
 
     renderWhoWillDie(today) {

@@ -58,6 +58,7 @@ const setStatus = (name, status, days, currentDay) => {
           }
           return survivor
         })
+        if (status === 'deadByPeople') day.survivorsAmount = day.survivorsAmount - 1
     }
     return day
   })
@@ -97,6 +98,7 @@ export const healByDoctor = (name) => (dispatch, getState) => {
   const updateState = setStatus(name, 'healByDoctor', days, currentDay)
 
   dispatch({type: 'DOCTOR_HEAL', payload: updateState})
+  dispatch({type: 'MARK_HEAL', payload: name})
   dispatch(nextOrder())
 }
 

@@ -16,7 +16,8 @@ const initialState = {
   killingDiscussion: false,
   discussion: false,
   witchUseKill: false,
-  witchUseSave: false
+  witchUseSave: false,
+  healedYesterday: '',
 }
 
 const gameReducer = (state = initialState, action) => {
@@ -31,6 +32,8 @@ const gameReducer = (state = initialState, action) => {
       return {...state, days: action.payload}
     case 'DOCTOR_HEAL':
       return {...state, days: action.payload}
+    case 'MARK_HEAL':
+      return {...state, healedYesterday: action.payload}
     case 'WITCH_KILL':
       return {...state, days: action.payload, witchUseKill: true}
     case 'WITCH_SAVE':

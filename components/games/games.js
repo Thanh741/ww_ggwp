@@ -158,28 +158,27 @@ class Games extends React.Component {
                 <View>
                     {seerIsAlive
                         ? <View>
-                                {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor) => {
-                                    if (survivor.status === 'deadByPeople')
-                                        return (
-                                            <View></View>
-                                        )
+                            {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor) => {
+                                if (survivor.status === 'deadByPeople')
                                     return (
-                                        <View key={survivor.name}>
-                                            <Text>{survivor.name}</Text>
-                                            <Button title="Predict" onPress={seeBySeer.bind('', survivor.name)}/>
-                                        </View>
+                                        <View></View>
                                     )
-                                })
-}
-                            </View>
-                        : <View>
-                            <Button title="Next Role" onPress={this.props.nextOrder}/>
-                        </View>
-}
+                                return (
+                                    <View key={survivor.name}>
+                                        <Text>{survivor.name} : {survivor.role}</Text>
+                                        {/*<Button title="Predict" onPress={seeBySeer.bind('', survivor.name)}/>  */}
+                                    </View>
+                                )
+                            })}
+                      </View> : <View></View>
+                    }
+                   <View>
+                        <Button title="Next Role" onPress={this.props.nextOrder}/>
+                    </View>
                 </View>
             </View>
         )
-    }
+      }
 
     renderPhase(today) {
         const {callOrder} = this.props

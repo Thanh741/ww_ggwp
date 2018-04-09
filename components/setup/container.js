@@ -22,7 +22,6 @@ const mapDispatchToProps = (dispatch: Function) => ({
     })
   },
   updateRoles: (roles) => {
-    console.log('roles', roles);
     dispatch({
       type: 'UPDATE_PLAYER_ROLES',
       payload: roles

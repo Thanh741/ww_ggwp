@@ -35,9 +35,9 @@ export const randomRoles = () => (dispatch, getState) => {
       role: allRoles[randomArray[index]]
     }
   })
-
-  console.log('player', players);
+  const callOrder = ['Werewolf'].concat(extendRoles)
   dispatch({type: 'INIT_ASSIGN_STATE', payload: players})
+  dispatch({type: 'INIT_CALL_ORDER', payload: callOrder})
 }
 export const startGame = () => (dispatch, getState) => {
   const rules = getState().rules;

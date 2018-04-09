@@ -2,7 +2,7 @@
 const initialState = {
   playerNumber: 7,
   playerNames: '',
-  roles: [{name: 'Seer', active: true}, {name: 'Protector', active: false}, {name: 'Witch', active: false}]
+  roles: [{name: 'Witch', active: true}, {name: 'Doctor', active: false}, {name: 'Seer', active: false}]
 }
 const setupReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -12,6 +12,12 @@ const setupReducer = (state = initialState, action) => {
       return { ...state, playerNames: action.payload}
     case 'UPDATE_PLAYER_ROLES':
       return { ...state, roles: action.payload}
+    case 'RESET_SETUP':
+      return {
+        playerNumber: 7,
+        playerNames: '',
+        roles: [{name: 'Witch', active: true}, {name: 'Doctor', active: false}, {name: 'Seer', active: false}]
+      }
     default:
       return state
   }

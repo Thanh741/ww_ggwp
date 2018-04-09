@@ -16,7 +16,7 @@ class Assigning extends React.Component {
     }
   }
   render() {
-    const { player, nextPlayer } = this.props
+    const { player = {}, nextPlayer } = this.props
     const { showRole } = this.state
     return (
       <View>

@@ -8,6 +8,7 @@ const initialState = {
   currentShift: 0,
   days: [],
   order: 0,
+  callOrder: [],
   clock: {
     minutes: 2,
     seconds: 30
@@ -20,6 +21,8 @@ const gameReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'INIT_FIRST_DAY':
       return  {...state, days: action.payload}
+    case 'INIT_CALL_ORDER':
+      return {...state, callOrder: action.payload}
     case 'NEXT_ORDER':
       return {...state, order: action.payload}
     case 'WEREWOLF_KILL':
@@ -46,6 +49,18 @@ const gameReducer = (state = initialState, action) => {
         discussion: false,
         killingDiscussion: false
       }
+    case 'TOGGLE_VOTING':
+      return {
+        ...state,
+        killingDiscussion: action.payload
+      }
+    case 'TOGGLE_DISCUSSION':
+      return {
+        ...state,
+        discussion: action.payload
+      }
+    case 'RESET_GAME':
+      return initialState
     default:
       return state
   }

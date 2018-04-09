@@ -16,7 +16,7 @@ class Clock extends React.Component {
       this.setState({seconds})
       if (seconds === 0) {
         clearInterval(this._cancelInterval)
-        this.props.changeShift()
+        this.props.toggleDiscussion()
       }
     }, 1000)
   }
@@ -31,8 +31,8 @@ class Clock extends React.Component {
       <View>
         <Text>{seconds}</Text>
         <Button
-          onPress={() => {this.props.changeShift()}}
-          title="NIGHT COME"
+          onPress={() => {this.props.toggleDiscussion()}}
+          title="STOP"
         />
       </View>
     )

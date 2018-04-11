@@ -18,13 +18,14 @@ const Routes = (props) => (
           <Scene key="assigning" component={Assigning} title="Assigning" />
           <Scene tabs initial={true} title="WEREWOLF" showLabel={false} activeTintColor={color.yellow}>
            <Scene
-              key='project'  title='project'
+              key='project'  title='Werewolf'
              component={Rules}
              icon={(tab) => {
                const color = tab.focused ? tab.activeTintColor : 'black'
                return <Icon size={24} color={color} name="playlist-add-check" />
              }}/>
            <Scene
+            title='Werewolf'
             key='setup'
             component={() => <View></View>}
             tabBarLabel={'Set Up'}
@@ -35,7 +36,9 @@ const Routes = (props) => (
               const color = tab.focused ? tab.activeTintColor : 'black';
               return <Icon size={24} color={color} name="playlist-add" />
             }} />
-           <Scene tabBarLabel={'Stories'} component={Rules}
+           <Scene
+             title='Werewolf'
+             tabBarLabel={'Stories'} component={Rules}
              icon={(tab) => {
                const color = tab.focused ? tab.activeTintColor : 'black';
                return <Icon size={24} color={color} name="book" />
@@ -44,19 +47,17 @@ const Routes = (props) => (
             </Scene>
           </Scene>
        <Scene
-         backTitle={'Close'}
+         backTitle={'Cancel'}
          key='setupModal'
          component={SetUp}
          renderRightButton={<Button
            title="Next"
-           color="#841584"
            onPress={() => {
              const result = props.validateRules()
              if (result.valid) {
-               console.log('next');
                props.randomRoles()
                Actions.pop()
-               Actions.push('assigning')
+               Actions.assigning()
              } else {
                alert(result.message)
              }

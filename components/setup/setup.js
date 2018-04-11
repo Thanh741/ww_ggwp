@@ -11,11 +11,11 @@ const win = Dimensions.get('window');
 
 const SetUpView = styled.View`
   flex: 1;
-  background-color: ${color.yellow};
+  background-color: ${color.white};
 `
 const PickerContainer = styled.View`
   height: ${win.height / 2};
-  background: ${color.black};
+  background: ${color.white};
   padding: 5px 20px;
 `
 const TextContainer = styled.View`
@@ -23,7 +23,7 @@ const TextContainer = styled.View`
   margin: 5px 20px;
 `
 const TextNumber = styled.Text`
-  font-size: 20px;
+  font-size: 15px;
   alignItems: center;
   color: ${color.black};
   alignItems: center;
@@ -31,7 +31,7 @@ const TextNumber = styled.Text`
 const TextName = styled.Text`
   font-size: 20px;
   alignItems: center;
-  color: ${color.black};
+  color: ${color.white};
   alignItems: center;
 `;
 const ListPickers = styled.View`
@@ -43,16 +43,16 @@ const ListPickers = styled.View`
 `
 const PlayersNumber = styled.TouchableOpacity`
   flex: 1;
-  border: 1px solid ${color.yellow};
+  border: 1px solid ${color.white};
   alignItems: center;
   justifyContent: center;
   height: 50;
-  backgroundColor: ${(props) => props.active ? color.yellow : color.black}
+  backgroundColor: ${(props) => props.active ? color.orange : color.black}
 `;
 const InputStyling = styled.TextInput`
 `;
 const PlayerNumberText = styled.Text`
-  color: ${(props) => props.active ? color.black : color.white}
+  color: ${(props) => props.active ? color.orange : color.black}
 `;
 class SetUp extends Component {
   constructor() {

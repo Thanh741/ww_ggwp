@@ -14,5 +14,5 @@ const app = () => (
 );
 
 
-
+console.disableYellowBox = true;
 AppRegistry.registerComponent('reactTutorialApp', () => app);

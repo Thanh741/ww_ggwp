@@ -20,6 +20,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import * as actionCreators  from './AppActionCreator'
 
+import {
+  setCustomView,
+  setCustomTextInput,
+  setCustomText,
+  setCustomImage,
+  setCustomTouchableOpacity
+} from 'react-native-global-props';
+
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
     'Cmd+D or shake for dev menu',
@@ -29,6 +37,15 @@ const instructions = Platform.select({
 
 
 type Props = {};
+
+const customTextProps = {
+  style: {
+    fontSize: 16,
+    fontFamily: Platform.OS === 'ios' ? 'Avenir Next LT Pro' : 'Roboto',
+    color: 'black'
+  }
+};
+setCustomText(customTextProps);
 
 class App extends Component<Props> {
   render() {

@@ -5,7 +5,7 @@ import Login from './login'
 import SetUp from './setup/container'
 import Game from './games/container'
 import Assigning from './assigning/container'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+// import Icon from 'react-native-vector-icons/MaterialIcons'
 import { color } from '../resource/';
 import { View, Text, Image, TextInput, Dimensions, Button, TouchableOpacity } from 'react-native';
 
@@ -15,14 +15,14 @@ const Routes = (props) => (
        <Scene key = "root">
           <Scene key = "login" component = {Login} title = "Login" initial = {false} />
           <Scene key="game" component={Game} title="Game" />
-          <Scene key="assigning" component={Assigning} title="Assigning" />
-          <Scene tabs initial={true} title="WEREWOLF" showLabel={false} activeTintColor={color.yellow}>
+          <Scene key="assigning" component={Assigning} title="Assigning"/>
+          <Scene tabs title="WEREWOLF" showLabel={false} activeTintColor={color.yellow} initial={true}>
            <Scene
               key='project'  title='Werewolf'
              component={Rules}
              icon={(tab) => {
                const color = tab.focused ? tab.activeTintColor : 'black'
-               return <Icon size={24} color={color} name="playlist-add-check" />
+               return <Text>FUCK</Text>
              }}/>
            <Scene
             title='Werewolf'
@@ -34,14 +34,14 @@ const Routes = (props) => (
             }}
             icon={(tab) => {
               const color = tab.focused ? tab.activeTintColor : 'black';
-              return <Icon size={24} color={color} name="playlist-add" />
+              return <Text>FUCK 2</Text>
             }} />
            <Scene
              title='Werewolf'
              tabBarLabel={'Stories'} component={Rules}
              icon={(tab) => {
                const color = tab.focused ? tab.activeTintColor : 'black';
-               return <Icon size={24} color={color} name="book" />
+               return <Text>FUCK 3</Text>
              }}
              />
             </Scene>
@@ -57,7 +57,7 @@ const Routes = (props) => (
              if (result.valid) {
                props.randomRoles()
                Actions.pop()
-               Actions.assigning()
+               Actions.push('assigning')
              } else {
                alert(result.message)
              }

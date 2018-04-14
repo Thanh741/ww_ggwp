@@ -13,47 +13,71 @@ const SetUpView = styled.View`
   flex: 1;
   background-color: ${color.white};
 `
-const PickerContainer = styled.View`
-  height: ${win.height / 2};
-  background: ${color.white};
-  padding: 5px 20px;
-`
-const TextContainer = styled.View`
-  flex: 1;
-  margin: 5px 20px;
-`
 const TextNumber = styled.Text`
-  font-size: 15px;
-  alignItems: center;
   color: ${color.black};
-  alignItems: center;
+  padding-right: 15px
+  text-align: right;
+  font-size: 14px;
 `;
-const TextName = styled.Text`
-  font-size: 20px;
-  alignItems: center;
-  color: ${color.white};
-  alignItems: center;
-`;
+const Container = styled.View`
+  height: ${(prop) => prop.height};
+  padding-top: ${(prop) => prop.paddingTop || 0};
+`
 const ListPickers = styled.View`
   margin: 0;
   padding: 0;
   flex: 1;
-  flexDirection: row
-  height: 100px;
+  flexDirection: row;
+`
+const Picker = styled.TouchableOpacity`
+  flex: 1;
+  alignItems: center;
+  justifyContent: center;
+  backgroundColor: ${(props) => props.active ? '#F8E71C' : '#D8D8D8'};
+  border-radius: 5px;
+  margin: 0px 12px
+`;
+
+const ListPlayerNumbers = styled.TouchableOpacity`
+  margin: 0px 0px 50px 0px;
+  flex: 1;
+  flexDirection: row;
+  height: 150;
 `
 const PlayersNumber = styled.TouchableOpacity`
   flex: 1;
-  border: 1px solid ${color.white};
   alignItems: center;
+  background: #D8D8D8;
   justifyContent: center;
-  height: 50;
-  backgroundColor: ${(props) => props.active ? color.orange : color.black}
+  backgroundColor: ${(props) => props.active ? '#F8E71C' : '#D8D8D8'};
+  height: 35;
 `;
+
 const InputStyling = styled.TextInput`
 `;
 const PlayerNumberText = styled.Text`
-  color: ${(props) => props.active ? color.orange : color.black}
+  font-weight: ${(props) => props.active ? 'bold' : 'normal'};
+  font-size: 14px;
 `;
+const PlayerNumberTextBold = styled.Text`
+  font-weight: bold;
+  font-size: 14px;
+`
+const PlayerNumberTextActive = styled.Text`
+font-weight: bold
+`;
+
+const TextView = styled.View`
+  margin-top: 40px;
+  margin-bottom: 12px;
+`
+const TextInputCustom = styled.TextInput`
+  background: #D8D8D8;
+  height: ${win.height - 400}
+  padding: 15px;
+  font-size: 15px;
+`
+
 class SetUp extends Component {
   constructor() {
     super();
@@ -91,51 +115,59 @@ class SetUp extends Component {
   render() {
     return (
       <SetUpView>
-        <PickerContainer>
-          <TextNumber>Players Numbers</TextNumber>
-          <ListPickers>
-            {[7, 8, 9, 10, 11, 12].map((i) =>
-              i == this.props.playerNumber ?
-              <PlayersNumber
-                active
-                key={i}
-                onPress={()=> {this.props.updatePlayerNumber(i)}}
+          <Container height={180}>
+            <TextView>
+              <TextNumber>extended <PlayerNumberTextBold>roles</PlayerNumberTextBold></TextNumber>
+            </TextView>
+            <ListPickers>
+              {this.props.roles.map((i) =>
+                <Picker
+                  key={i.name}
+                  onPress={()=> {this.setRoles(i.name)}}
+                  active={i.active}
                 >
-                <PlayerNumberText active>{i}</PlayerNumberText>
-              </PlayersNumber>
-            :
-              <PlayersNumber
-                key={i}
-                onPress={()=> {this.props.updatePlayerNumber(i)}}
-                >
-                <PlayerNumberText>{i}</PlayerNumberText>
-              </PlayersNumber>
-            )}
-          </ListPickers>
-          <TextNumber>Bonus Characters</TextNumber>
-          <ListPickers>
-            {this.props.roles.map((i) =>
-              <PlayersNumber
-                key={i.name}
-                onPress={()=> {this.setRoles(i.name)}}
-                active={i.active}
-              >
-                <PlayerNumberText active={i.active}>{i.name}</PlayerNumberText>
-              </PlayersNumber>
-            )}
-          </ListPickers>
-        </PickerContainer>
-        <TextContainer>
-          <TextName>Player Names ({this.state.playerLength})</TextName>
-          <TextInput
-            multiline={true}
-            numberOfLines={4}
-            placeholder={'Alex, Bella, Charles, ...'}
-            placeholderColor={color.black}
-            onChangeText={this.setPlayerNames}
-            value={this.props.playerNames}
-          />
-        </TextContainer>
+                  <PlayerNumberText active={i.active}>{i.name}</PlayerNumberText>
+                </Picker>
+              )}
+            </ListPickers>
+          </Container>
+          <Container height={120}>
+            <TextView>
+              <TextNumber>player <PlayerNumberTextBold>numbers</PlayerNumberTextBold></TextNumber>
+            </TextView>
+            <ListPlayerNumbers>
+              {[7, 8, 9, 10, 11, 12].map((i) =>
+                i == this.props.playerNumber ?
+                <PlayersNumber
+                  active
+                  key={i}
+                  onPress={()=> {this.props.updatePlayerNumber(i)}}
+                  >
+                  <PlayerNumberTextBold>{i}</PlayerNumberTextBold>
+                </PlayersNumber>
+              :
+                <PlayersNumber
+                  key={i}
+                  onPress={()=> {this.props.updatePlayerNumber(i)}}
+                  >
+                  <PlayerNumberText>{i}</PlayerNumberText>
+                </PlayersNumber>
+              )}
+            </ListPlayerNumbers>
+          </Container>
+          <Container height={100}>
+            <TextView>
+              <TextNumber>player <PlayerNumberTextBold>names</PlayerNumberTextBold></TextNumber>
+            </TextView>
+            <TextInputCustom
+              multiline={true}
+              numberOfLines={2}
+              placeholder={'Alex, Bella, Charles, ...'}
+              placeholderColor={color.black}
+              onChangeText={this.setPlayerNames}
+              value={this.props.playerNames}
+            />
+          </Container>
       </SetUpView>
     )
   }

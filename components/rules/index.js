@@ -10,7 +10,7 @@ import {
 import styled from 'styled-components'
 
 import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+// import Icon from 'react-native-vector-icons/MaterialIcons'
 import { Actions } from 'react-native-router-flux'
 
 const win = Dimensions.get('window');
@@ -43,6 +43,7 @@ const ItemTitle = styled.Text`
   font-size: 20px;
   font-weight: bold;
   color: black;
+  font-family: Avenir Next LT Pro;
 `
 const ItemIcon = styled.View`
   margin-right: 10px
@@ -58,7 +59,6 @@ class Rules extends React.Component {
             ['Game 7 nguoi', 'Game 8 nguoi', 'Game 9 nguoi'].map((i) =>
             <ItemView key={i}>
               <ItemIcon>
-                <Icon size={24} color="black" name="playlist-add-check" />
               </ItemIcon>
               <ItemTitle key={i}>{i}</ItemTitle>
             </ItemView>)

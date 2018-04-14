@@ -1,7 +1,7 @@
 
 const initialState = {
   playerNumber: 7,
-  playerNames: '',
+  playerNames: 'Alex, Bray, Datmaniac, Emoji, Frank, Geti, Jenny',
   roles: [{name: 'Witch', active: true}, {name: 'Doctor', active: false}, {name: 'Seer', active: false}]
 }
 const setupReducer = (state = initialState, action) => {

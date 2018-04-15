@@ -84,7 +84,7 @@ const BoldColorText = styled.Text`
   font-weight: bold;
   color: black;
 `
-const Character = styled.View`
+const Character = styled.TouchableOpacity`
   height: 60px;
   background-color: #D8D8D8;
   alignItems: center;
@@ -99,7 +99,6 @@ const CharacterContainer = styled.View`
   flexDirection: row;
   margin-top: 20px;
   justifyContent: center;
-  alignItems: center;
 `
 const CustomText = styled.Text`
   font-size: 14px;
@@ -107,12 +106,6 @@ const CustomText = styled.Text`
 const CustomTextRole = styled.Text`
   font-size: 14px;
   font-weight: bold;
-`
-const CharacterContainerVertical = styled.View`
-  margin-top: 20px;
-  justifyContent: center;
-  alignItems: center;
-  padding: 0 10px;
 `
 const CustomView = styled.View`
   alignItems: center;
@@ -131,6 +124,10 @@ const CenterView = styled.View`
 class Games extends React.Component {
     constructor() {
         super();
+        this.state = {
+          witchSave: '',
+          witchKill: '',
+        }
         this.renderSeerPhase = this.renderSeerPhase.bind(this)
         this.renderWitchPhase = this.renderWitchPhase.bind(this)
         this.renderDoctorPhase = this.renderDoctorPhase.bind(this)
@@ -162,10 +159,8 @@ class Games extends React.Component {
                 <CharacterContainer>
                   {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor, index) => {
                       return (
-                          <Character key={survivor.name}>
-                            <TouchableOpacity onPress={killByWerewolf.bind('', survivor.name)}>
+                          <Character key={survivor.name} onPress={killByWerewolf.bind('', survivor.name)}>
                               <CustomText>{survivor.name}</CustomText>
-                            </TouchableOpacity>
                           </Character>
                       )
                   })}
@@ -198,23 +193,18 @@ class Games extends React.Component {
                   witchIsAlive
                         ?
                         <CustomView>
-                          {today.survivors.filter(survivor => (survivor.status.indexOf('deadByWerewolf') > -1)).map((survivor) => {
-                              if (survivor.status === 'deadByPeople')
-                                  return (
-                                    <Character key={survivor.name}>
-
-                                    </Character>
-                                  )
+                          {
+                            today.survivors.filter(survivor => (survivor.status.indexOf('deadByWerewolf') > -1 && !checkDeadByPeople(survivor.status))).map((survivor) => {
+                              if (witchUseSave) return <View>{survivor.name}</View>
                               return (
-                                  <Character key={survivor.name}>
-                                      {!witchUseSave ?
-                                        <TouchableOpacity onPress={saveByWitch.bind('', survivor.name)}>
-                                            <CustomText>{survivor.name}</CustomText>
-                                        </TouchableOpacity> :
-                                        <CustomText>{survivor.name}</CustomText>}
+                                  <Character key={survivor.name} onPress={() => { this.setState({witchSave: survivor.name}) } }>
+                                    <CustomText>
+                                      { this.state.witchSave === survivor.name ? <BoldColorText>{survivor.name}</BoldColorText> : survivor.name }
+                                    </CustomText>
                                   </Character>
                               )
-                          })}
+                          })
+                        }
                         </CustomView>
                         : <View>
                             <Text>DEAD</Text>
@@ -225,13 +215,10 @@ class Games extends React.Component {
                 { witchIsAlive ?
                         <ScrollView horizontal>
                           {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor) => {
+                              if(witchUseKill) return <View></View>
                               return (
-                                  <Character key={survivor.name}>
-                                      {!witchUseKill ?
-                                      <TouchableOpacity onPress={killByWitch.bind('', survivor.name)}>
-                                        <CustomText>{survivor.name}</CustomText>
-                                      </TouchableOpacity> :
-                                      <CustomText>{survivor.name}</CustomText>}
+                                  <Character key={survivor.name} onPress={() => {this.setState({witchKill: survivor.name})}}>
+                                    <CustomText>{ this.state.witchKill === survivor.name ? <BoldColorText>{survivor.name}</BoldColorText> : survivor.name}</CustomText>
                                   </Character>
                               )
                           })}
@@ -240,8 +227,13 @@ class Games extends React.Component {
                       <View>DEAD</View>
                 }
                 <QuestionView height={30}>
-                  <TouchableOpacity onPress={this.props.nextOrder}>
-                    <QuestionText>Do nothing</QuestionText>
+                  <TouchableOpacity onPress={() => {
+                      const {witchSave, witchKill} = this.state;
+                      if (witchSave) this.props.saveByWitch(witchSave)
+                      if (witchKill) this.props.killByWitch(witchKill)
+                      this.props.nextOrder()
+                    }}>
+                    <QuestionText>Next</QuestionText>
                   </TouchableOpacity>
                 </QuestionView>
             </ViewContainer>
@@ -268,17 +260,10 @@ class Games extends React.Component {
                 </QuestionView>
                 {doctorIsAlive ?
                   <CharacterContainer>
-                    {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor) => {
+                    {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status) && healedYesterday !== survivor.name).map((survivor) => {
                       return (
-                        <Character key={survivor.name}>
-                            {
-                              healedYesterday === survivor.name
-                                ? <View></View>
-                                :
-                                <TouchableOpacity onPress={healByDoctor.bind('', survivor.name)}>
-                                  <CustomText>{survivor.name}</CustomText>
-                                </TouchableOpacity>
-                              }
+                        <Character key={survivor.name} onPress={healByDoctor.bind('', survivor.name)}>
+                          <CustomText>{survivor.name}</CustomText>
                         </Character>
                       )
                     })}
@@ -305,12 +290,10 @@ class Games extends React.Component {
                         ? <CharacterContainer>
                                 {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor) => {
                                     return (
-                                        <Character key={survivor.name}>
-                                          <TouchableOpacity onPress={this.props.nextOrder}>
+                                        <Character key={survivor.name} onPress={this.props.nextOrder}>
                                             <CustomText>{survivor.name}</CustomText>
                                             <CustomTextRole>{survivor.role}</CustomTextRole>
                                             {/*<Button title="Predict" onPress={seeBySeer.bind('', survivor.name)}/>  */}
-                                          </TouchableOpacity>
                                         </Character>
                                     )
                                 })}
@@ -363,12 +346,10 @@ class Games extends React.Component {
     renderWhoWillDie(today) {
         return today.survivors.map((survivor) => {
             return (
-                  <Character>
-                      <TouchableOpacity onPress={this.props.killByPeople.bind('', survivor.name)} key={survivor.name}>
+                  <Character onPress={this.props.killByPeople.bind('', survivor.name)} key={survivor.name}>
                       <CustomText>
                         {survivor.name}
                       </CustomText>
-                    </TouchableOpacity>
                   </Character>
             )
         })

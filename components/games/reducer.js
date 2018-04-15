@@ -1,7 +1,3 @@
-// status: 0, 1, 3
-// 0: alive
-// 1: death by WEREWOLF
-// 2: death by witch
 
 const initialState = {
   currentDay: 1,

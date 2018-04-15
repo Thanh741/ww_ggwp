@@ -38,14 +38,14 @@ const instructions = Platform.select({
 
 type Props = {};
 
-const customTextProps = {
-  style: {
-    fontSize: 16,
-    fontFamily: Platform.OS === 'ios' ? 'Avenir Next LT Pro' : 'Roboto',
-    color: 'black'
-  }
-};
-setCustomText(customTextProps);
+// const customTextProps = {
+//   style: {
+//     fontSize: 16,
+//     fontFamily: Platform.OS === 'ios' ? 'Avenir Next LT Pro' : 'Roboto',
+//     color: 'black'
+//   }
+// };
+// setCustomText(customTextProps);
 
 class App extends Component<Props> {
   render() {

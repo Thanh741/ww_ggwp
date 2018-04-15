@@ -5,11 +5,14 @@ import {
     Image,
     TextInput,
     Dimensions,
-    Button
+    Button,
+    TouchableOpacity,
+    ScrollView
 } from 'react-native';
 import styled from 'styled-components'
 import Clock from '../util/clock.js'
 import {checkDeadStatus, checkDeadByPeople, checkDeadStatusLastNight, findPersonByRole} from '../util/helper'
+const win = Dimensions.get('window');
 
 const RulesView = styled.View `
   flex: 1;
@@ -18,11 +21,111 @@ const RulesView = styled.View `
   backgroundColor: rgb(255, 204, 0);
 `
 const GameView = styled.View `
-
+  background-color: white;
+  height: ${win.height};
 `
 const ViewContainer = styled.View `
   display: flex;
-  flex-direction: row;
+  flexDirection: column;
+  alignItems: flex-start;
+`
+const DayCard = styled.View`
+background-color: #F8E71C;
+height: ${win.height - 200};
+margin: 18px 20px;
+border-radius: 4px;
+box-shadow: 1px 2px 2px #aaaa;
+display: flex;
+flexDirection: column;
+`
+const NightCard = styled.View`
+  background-color: #30435A;
+  height: ${win.height - 200};
+  margin: 18px 20px;
+  border-radius: 4px;
+  box-shadow: 1px 2px 2px #aaaa;
+  display: flex;
+  flexDirection: column;
+`
+const CurrentDay = styled.View`
+  margin: 40px 30px;
+  alignItems: flex-end;
+`
+const CurrentDayText = styled.Text`
+  font-size: 30px;
+  font-weight: bold;
+`
+const SurvivorLeft = styled.Text`
+  margin-top: 15px;
+  font-size: 18px;
+`
+const QuestionView = styled.View`
+  height: ${(props) => { return props.height || '75px' }};
+  background-color: #F8E71C;
+  alignItems: flex-end;
+  width: 100%;
+  padding: 0px 10px;
+`
+const QuestionRole = styled.Text`
+  font-weight: bold;
+  margin-top: 5px;
+  text-align: right;
+`
+
+const QuestionText = styled.Text`
+  margin-top: 10px;
+  font-size: 13px;
+`
+const BoldText =  styled.Text`
+  font-weight: bold;
+  color: #FF5F5F;
+`
+const BoldColorText = styled.Text`
+  font-weight: bold;
+  color: black;
+`
+const Character = styled.View`
+  height: 60px;
+  background-color: #D8D8D8;
+  alignItems: center;
+  justifyContent: center;
+  margin: 5px 5px;
+  border-radius: 5px;
+  width: 60px;
+`
+const CharacterContainer = styled.View`
+  flex: 1;
+  flex-wrap: wrap;
+  flexDirection: row;
+  margin-top: 20px;
+  justifyContent: center;
+  alignItems: center;
+`
+const CustomText = styled.Text`
+  font-size: 14px;
+`
+const CustomTextRole = styled.Text`
+  font-size: 14px;
+  font-weight: bold;
+`
+const CharacterContainerVertical = styled.View`
+  margin-top: 20px;
+  justifyContent: center;
+  alignItems: center;
+  padding: 0 10px;
+`
+const CustomView = styled.View`
+  alignItems: center;
+  justifyContent: center;
+`
+const CustomButton = styled.Button`
+  color: black;
+  font-weight: bold;
+`
+const CenterView = styled.View`
+  justifyContent: center;
+  alignItems: center;
+  display: flex;
 `
 
 class Games extends React.Component {
@@ -39,116 +142,151 @@ class Games extends React.Component {
 
     renderWerewolfPhase(today) {
         const {currentDay, currentShift, days, killByWerewolf, players} = this.props
-        const wereWolfNames = players.filter(player => player.role == 'Werewolf').map(player => <Text>{player.name}</Text>)
+        let wereWolfs = players.filter(player => player.role == 'Werewolf')
+        let wereWolfNames = '';
+        for(let wereWolf of wereWolfs) {
+          if (wereWolfNames == '') {
+            wereWolfNames = wereWolf.name
+          } else {
+            wereWolfNames = wereWolfNames + ', ' + wereWolf.name
+          }
+        }
         return (
             <ViewContainer>
-                <View>
-                    <Text>WEREWOLF : </Text>
-                    {wereWolfNames}
-                </View>
-                {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor, index) => {
-                    if (survivor.status === 'deadByPeople')
-                        return (
-                            <View></View>
-                        )
-                    return (
-                        <View key={survivor.name}>
-                            <Text>{survivor.name}</Text>
-                            <Button title="KIll" onPress={killByWerewolf.bind('', survivor.name)}/>
-                        </View>
-                    )
-                })
-}
+                <QuestionView>
+                  <QuestionRole>{wereWolfNames}</QuestionRole>
+                  <CenterView>
+                    <QuestionText>Werewolf, who do you want to <BoldText>kill</BoldText> this night ?</QuestionText>
+                  </CenterView>
+                </QuestionView>
+                <CharacterContainer>
+                  {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor, index) => {
+                      return (
+                          <Character key={survivor.name}>
+                            <TouchableOpacity onPress={killByWerewolf.bind('', survivor.name)}>
+                              <CustomText>{survivor.name}</CustomText>
+                            </TouchableOpacity>
+                          </Character>
+                      )
+                  })}
+                </CharacterContainer>
             </ViewContainer>
         )
     }
 
     renderWitchPhase(today) {
-        const {currentDay, currentShift, days, saveByWitch, killByWitch, witchUseSave, witchUseKill, players} = this.props
+        const {
+            currentDay,
+            currentShift,
+            days,
+            saveByWitch,
+            killByWitch,
+            witchUseSave,
+            witchUseKill,
+            players
+        } = this.props
         const witchNames = players.filter(player => player.role == 'Witch').map(player => <Text>{player.name}</Text>)
         const witch = findPersonByRole('Witch', days, currentDay)[0]
         const witchIsAlive = witch && !checkDeadByPeople(witch.status)
         return (
-            <View>
-                <View>
-                    <Text>WITCH: </Text>
-                    {witchNames}
-                </View>
-                <View>
-                    {
-                      witchIsAlive ?
-                      <View>
-                        {
-                          today.survivors.filter(survivor => (survivor.status.indexOf('deadByWerewolf') > -1)).map((survivor) => {
-                            if (survivor.status === 'deadByPeople')
-                                return (
-                                    <View></View>
-                                )
-                            return (
-                                <View key={survivor.name}>
-                                    <Text>{survivor.name} was attacked by WereWolf</Text>
-                                  {!witchUseSave ? <Button title="Save" onPress={saveByWitch.bind('', survivor.name)}/> : <View></View>}
-                                </View>
-                            )
-                          })
-                        }
-                        {
-                          today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor) => {
-                            if (survivor.status === 'deadByPeople')
-                                return (
-                                    <View></View>
-                                )
-                            return (
-                                <View key={survivor.name}>
-                                    <Text>{survivor.name}</Text>
-                                    {!witchUseKill ? <Button title="Kill" onPress={killByWitch.bind('', survivor.name)}/> : <View></View>}
-                                </View>
-                            )
-                          })
-                        }
-                      </View> :
-                      <View><Text>DEAD</Text></View>
-                    }
-                   <View>
-                        <Button title="Next Role" onPress={this.props.nextOrder}/>
-                    </View>
-                </View>
-            </View>
+            <ViewContainer>
+                <QuestionView>
+                  <QuestionRole>{witchNames}</QuestionRole>
+                  <QuestionText>Witch, this guy was bitten by Werewolf, do you want to heal him ?</QuestionText>
+                </QuestionView>
+                {
+                  witchIsAlive
+                        ?
+                        <CustomView>
+                          {today.survivors.filter(survivor => (survivor.status.indexOf('deadByWerewolf') > -1)).map((survivor) => {
+                              if (survivor.status === 'deadByPeople')
+                                  return (
+                                    <Character key={survivor.name}>
+
+                                    </Character>
+                                  )
+                              return (
+                                  <Character key={survivor.name}>
+                                      {!witchUseSave ?
+                                        <TouchableOpacity onPress={saveByWitch.bind('', survivor.name)}>
+                                            <CustomText>{survivor.name}</CustomText>
+                                        </TouchableOpacity> :
+                                        <CustomText>{survivor.name}</CustomText>}
+                                  </Character>
+                              )
+                          })}
+                        </CustomView>
+                        : <View>
+                            <Text>DEAD</Text>
+                        </View>}
+                <QuestionView height={30}>
+                  <QuestionText>Anyone you want to kill ?</QuestionText>
+                </QuestionView>
+                { witchIsAlive ?
+                        <ScrollView horizontal>
+                          {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor) => {
+                              return (
+                                  <Character key={survivor.name}>
+                                      {!witchUseKill ?
+                                      <TouchableOpacity onPress={killByWitch.bind('', survivor.name)}>
+                                        <CustomText>{survivor.name}</CustomText>
+                                      </TouchableOpacity> :
+                                      <CustomText>{survivor.name}</CustomText>}
+                                  </Character>
+                              )
+                          })}
+                        </ScrollView>
+                       :
+                      <View>DEAD</View>
+                }
+                <QuestionView height={30}>
+                  <TouchableOpacity onPress={this.props.nextOrder}>
+                    <QuestionText>Do nothing</QuestionText>
+                  </TouchableOpacity>
+                </QuestionView>
+            </ViewContainer>
         )
     }
 
     renderDoctorPhase(today) {
-        const {currentDay, currentShift, days, healByDoctor, healedYesterday, players} = this.props
+        const {
+            currentDay,
+            currentShift,
+            days,
+            healByDoctor,
+            healedYesterday,
+            players
+        } = this.props
         const doctorNames = players.filter(player => player.role == 'Doctor').map(player => <Text>{player.name}</Text>)
         const doctor = findPersonByRole('Doctor', days, currentDay)[0]
         const doctorIsAlive = doctor && !checkDeadByPeople(doctor.status)
         return (
-            <View>
-                <View>
-                    <Text>DOCTOR : </Text>
-                    {doctorNames}
-                </View>
-                <View>
-                    {doctorIsAlive
-                        ? <View>
-
-                                {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor) => {
-                                    return (
-                                        <View key={survivor.name}>
-                                            <Text>{survivor.name}</Text>
-                                            {healedYesterday === survivor.name ? <View></View> : <Button title="Protect" onPress={healByDoctor.bind('', survivor.name)}/>}
-                                        </View>
-                                    )
-                                })
-}
-                            </View>
-
-                        : <View>
-                            <Button title="Next Role" onPress={this.props.nextOrder}/>
-                        </View>
-}
-                </View>
-            </View>
+            <ViewContainer>
+                <QuestionView>
+                  <QuestionRole>{doctorNames}</QuestionRole>
+                  <QuestionText>Doctor, who do you want to heal ? </QuestionText>
+                </QuestionView>
+                {doctorIsAlive ?
+                  <CharacterContainer>
+                    {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor) => {
+                      return (
+                        <Character key={survivor.name}>
+                            {
+                              healedYesterday === survivor.name
+                                ? <View></View>
+                                :
+                                <TouchableOpacity onPress={healByDoctor.bind('', survivor.name)}>
+                                  <CustomText>{survivor.name}</CustomText>
+                                </TouchableOpacity>
+                              }
+                        </Character>
+                      )
+                    })}
+                  </CharacterContainer>
+                    : <View>
+                        <Button title="Next Role" onPress={this.props.nextOrder}/>
+                    </View>}
+            </ViewContainer>
         )
     }
 
@@ -158,35 +296,32 @@ class Games extends React.Component {
         const seer = findPersonByRole('Seer', days, currentDay)[0]
         const seerIsAlive = seer && !checkDeadByPeople(seer.status)
         return (
-            <View>
-                <View>
-                    <Text>SEER:</Text>
-                    {seerNames}
-                </View>
-                <View>
+            <ViewContainer>
+              <QuestionView>
+                <QuestionRole>{seerNames}</QuestionRole>
+                <QuestionText>Seer, who do you want to predict this night ?</QuestionText>
+              </QuestionView>
                     {seerIsAlive
-                        ? <View>
-                            {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor) => {
-                                if (survivor.status === 'deadByPeople')
+                        ? <CharacterContainer>
+                                {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor) => {
                                     return (
-                                        <View></View>
+                                        <Character key={survivor.name}>
+                                          <TouchableOpacity onPress={this.props.nextOrder}>
+                                            <CustomText>{survivor.name}</CustomText>
+                                            <CustomTextRole>{survivor.role}</CustomTextRole>
+                                            {/*<Button title="Predict" onPress={seeBySeer.bind('', survivor.name)}/>  */}
+                                          </TouchableOpacity>
+                                        </Character>
                                     )
-                                return (
-                                    <View key={survivor.name}>
-                                        <Text>{survivor.name} : {survivor.role}</Text>
-                                        {/*<Button title="Predict" onPress={seeBySeer.bind('', survivor.name)}/>  */}
-                                    </View>
-                                )
-                            })}
-                      </View> : <View><Text>DEAD</Text></View>
-                    }
-                   <View>
-                        <Button title="Next Role" onPress={this.props.nextOrder}/>
-                    </View>
-                </View>
-            </View>
+                                })}
+                            </CharacterContainer>
+                        : <View>
+                            <Text>DEAD</Text>
+                        </View>}
+
+            </ViewContainer>
         )
-      }
+    }
 
     renderPhase(today) {
         const {callOrder} = this.props
@@ -207,24 +342,34 @@ class Games extends React.Component {
     renderWhoDieLastNight() {
         const {days, currentDay} = this.props
         const yesterday = days.filter(i => i.day === (currentDay - 1))[0]
-        console.log('yesterday', yesterday);
-        const survivor = yesterday.survivors.filter(survivor => checkDeadStatusLastNight(survivor.status)).map((one) => {
-            return <View key={one.name}>
-                <Text>{one.name}</Text>
-            </View>
-        })
-        return survivor || 'no one'
+        const survivor = yesterday.survivors.filter(survivor => checkDeadStatusLastNight(survivor.status))
+        if (survivor.length === 1) {
+          return survivor[0].name
+        } else if (survivor.length > 1) {
+          let string = ''
+          for (let x = 0; x < survivor.length;   x++ ) {
+            if (x === 0) {
+              string = string + survivor[x].name
+            }
+            else {
+              string = string + ' and ' + survivor[x].name
+            }
+          }
+          return string
+        }
+        return 'No one'
     }
 
     renderWhoWillDie(today) {
         return today.survivors.map((survivor) => {
             return (
-                <View key={survivor.name}>
-                    <Text>
+                  <Character>
+                      <TouchableOpacity onPress={this.props.killByPeople.bind('', survivor.name)} key={survivor.name}>
+                      <CustomText>
                         {survivor.name}
-                    </Text>
-                    <Button title="DIE" onPress={this.props.killByPeople.bind('', survivor.name)}/>
-                </View>
+                      </CustomText>
+                    </TouchableOpacity>
+                  </Character>
             )
         })
     }
@@ -244,41 +389,56 @@ class Games extends React.Component {
             )
         return (
             <GameView>
-                <Text>It is day {currentDay}
-                    on {currentShift
-                        ? 'Day'
-                        : 'Night'}
-                </Text>
-                <Text>There are {today.survivorsAmount}
-                    survivors left</Text>
                 {currentShift
-                    ? <View>
-                            <View>
-                                <Text>WHO DIES LAST NIGHT:
-                                </Text>
-                                {this.renderWhoDieLastNight()}
-                            </View>
-                            {discussion
-                                ? <View></View>
-                                : <Button title="START DISCUSSION" onPress={this.props.toggleDiscussion}/>}
-                            {discussion
-                                ? <Clock toggleDiscussion={this.props.toggleDiscussion}/>
-                                : <View></View>}
-                            {killingDiscussion
-                                ? <View></View>
-                                : <Button title="START VOTING" onPress={this.props.toggleVoting}/>}
-                            {killingDiscussion
-                                ? this.renderWhoWillDie(today)
-                                : <View></View>}
+                    ? <DayCard>
+                        <CurrentDay>
+                          <CurrentDayText> Day {currentDay} </CurrentDayText>
+                          <SurvivorLeft>
+                            <BoldColorText> {this.renderWhoDieLastNight()}</BoldColorText> was dead last night
+                          </SurvivorLeft>
+                          <SurvivorLeft>There are <BoldColorText>{today.survivorsAmount} </BoldColorText>survivors left</SurvivorLeft>
+                        </CurrentDay>
+                        {discussion
+                            ? <View></View>
+                            :
+                            <CenterView>
+                              <TouchableOpacity onPress={this.props.toggleDiscussion}>
+                                <BoldColorText>Discuss</BoldColorText>
+                              </TouchableOpacity>
+                            </CenterView>
 
-                        </View>
-                    : <View>
+                        }
+                        {discussion
+                            ? <Clock toggleDiscussion={this.props.toggleDiscussion}/>
+                            : <View></View>}
+                        {killingDiscussion
+                            ? <View></View>
+                            :
+                            <CenterView>
+                              <TouchableOpacity onPress={this.props.toggleVoting}>
+                                <BoldColorText>Vote</BoldColorText>
+                              </TouchableOpacity>
+                            </CenterView>
+                        }
+                        {killingDiscussion
+                            ?
+                            <CharacterContainer>
+                              {
+                                this.renderWhoWillDie(today)
+                              }
+                          </CharacterContainer>
+                            : <View></View>}
+                      </DayCard>
+                    : <NightCard>
+                        <CurrentDay>
+                          <CurrentDayText> Night {currentDay} </CurrentDayText>
+                          <SurvivorLeft>There are <BoldColorText>{today.survivorsAmount} </BoldColorText>survivors left</SurvivorLeft>
+                        </CurrentDay>
                         {this.renderPhase(today)}
-                    </View>
-}
+                    </NightCard>
+                  }
             </GameView>
         )
-
     }
 }
 

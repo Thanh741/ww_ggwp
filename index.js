@@ -15,4 +15,4 @@ const app = () => (
 
 
 console.disableYellowBox = true;
-AppRegistry.registerComponent('reactTutorialApp', () => app);
+AppRegistry.registerComponent('taleofwerewolf', () => app);

@@ -43,7 +43,6 @@ const ItemTitle = styled.Text`
   font-size: 20px;
   font-weight: bold;
   color: black;
-  font-family: Avenir Next LT Pro;
 `
 const ItemIcon = styled.View`
   margin-right: 10px

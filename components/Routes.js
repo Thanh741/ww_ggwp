@@ -1,10 +1,5 @@
-import React from 'react'
-import { Router, Scene, Actions, Modal } from 'react-native-router-flux'
-import Rules from './rules'
-import Login from './login'
-import SetUp from './setup/container'
-import Game from './games/container'
-import Assigning from './assigning/container'
+
+
 // import Icon from 'react-native-vector-icons/MaterialIcons'
 import { color } from '../resource/';
 import { View, Text, Image, TextInput, Dimensions, Button, TouchableOpacity } from 'react-native';

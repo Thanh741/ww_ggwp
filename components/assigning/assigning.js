@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, Button, TouchableOpacity, Dimensions, TouchableHighlight, TouchableWithoutFeedback } from 'react-native'
 import styled from 'styled-components'
 import { Actions } from 'react-native-router-flux'
+import { NavigationActions } from 'react-navigation'
 
 const win = Dimensions.get('window');
 
@@ -55,9 +56,17 @@ class Assigning extends React.Component {
     return (
       <AssignView>
         <TouchableWithoutFeedback onPress={() => {
-            if (showRole) {nextPlayer()}
-            this.setState({showRole: !showRole})
-          }}>
+          if (showRole) {nextPlayer().then((res) => {
+            if (res.startGame) {
+              const resetAction = NavigationActions.reset({
+                index: 0,
+                actions: [NavigationActions.navigate({ routeName: 'Game' })],
+              });
+              this.props.navigation.dispatch(resetAction)
+            }
+          })}
+          this.setState({showRole: !showRole})
+        }}>
           <CardView>
             <RoleText>{ showRole ? player.role : ''}</RoleText>
             <NameText>{player.name}</NameText>

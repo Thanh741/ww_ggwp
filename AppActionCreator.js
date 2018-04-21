@@ -39,6 +39,7 @@ export const randomRoles = () => (dispatch, getState) => {
   dispatch({type: 'INIT_ASSIGN_STATE', payload: players})
   dispatch({type: 'INIT_CALL_ORDER', payload: callOrder})
 }
+
 export const startGame = () => (dispatch, getState) => {
   const rules = getState().rules;
   const currentDay = 1;

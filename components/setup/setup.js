@@ -79,6 +79,18 @@ const TextInputCustom = styled.TextInput`
 `
 
 class SetUp extends Component {
+  static navigationOptions = ({ navigation }) => {
+    const params = navigation.state.params || {}
+    return {
+      title: 'Set Up',
+      headerRight: (
+        <Button
+          title="Next"
+          onPress={ params.nextScreen }
+        />
+      )
+    }
+  };
   constructor() {
     super();
     this.state = {
@@ -89,6 +101,10 @@ class SetUp extends Component {
     this.setPlayerNumber = this.setPlayerNumber.bind(this)
     this.setRoles = this.setRoles.bind(this)
     this.setPlayerNames = this.setPlayerNames.bind(this)
+    this.nextScreen = this.nextScreen.bind(this)
+  }
+  componentWillMount() {
+    this.props.navigation.setParams({ nextScreen: this.nextScreen });
   }
   setPlayerNumber(number) {
     this.setState({
@@ -112,7 +128,17 @@ class SetUp extends Component {
     })
     this.props.updatePlayerNames(value)
   }
+  nextScreen() {
+    const result = this.props.validateRules()
+    if (result.valid) {
+      this.props.randomRoles()
+      this.props.navigation.navigate('Assigning')
+    } else {
+      alert(result.message)
+    }
+  }
   render() {
+    console.log('this.props', this.props);
     return (
       <SetUpView>
           <Container height={180}>

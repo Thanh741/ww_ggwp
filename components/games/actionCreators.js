@@ -1,5 +1,6 @@
 import { checkDeadStatus, checkDeadByPeople } from '../util/helper'
 import { Actions } from 'react-native-router-flux'
+import { NavigationActions } from 'react-navigation'
 export const nextDay = () => (dispatch, getState) => {
   let { currentDay, currentShift, days } = getState().game
   const survivors =  days[days.length - 1].survivors.filter((survivor) => !checkDeadStatus(survivor.status)).map((survivor) => { return {...survivor, status: []}})
@@ -11,7 +12,8 @@ export const nextDay = () => (dispatch, getState) => {
     dispatch({type: 'RESET_GAME'})
     dispatch({type: 'RESET_SETUP'})
     dispatch({type: 'RESET_ASSIGNING'})
-    Actions.project()
+    // Actions.project()
+    dispatch(NavigationActions.navigate({routeName: 'SetUp'}))
     return;
   }
   if (werewolfAmount === 0) {
@@ -19,7 +21,8 @@ export const nextDay = () => (dispatch, getState) => {
     dispatch({type: 'RESET_GAME'})
     dispatch({type: 'RESET_SETUP'})
     dispatch({type: 'RESET_ASSIGNING'})
-    Actions.project()
+    // Actions.project()
+    dispatch(NavigationActions.navigate({routeName: 'SetUp'}))
     return;
   }
   const nextDay = {

@@ -63,46 +63,6 @@ class Rules extends React.Component {
             </ItemView>)
           }
         </ListView>
-        {/*
-          <SidebarContainer>
-            <BottomNavigation
-              labelColor="white"
-              rippleColor="red"
-              style={{
-                height: 56,
-                elevation: 8,
-                position: 'absolute',
-                left: 0,
-                bottom: 0,
-                right: 0
-              }}
-              onTabChange={newTabIndex => {
-                switch (newTabIndex) {
-                  case 0: Actions.rules(); break;
-                  case 1: Actions.setup(); break;
-                  default: break;
-                }
-              }}
-            >
-            <Tab
-              barBackgroundColor="#37474F"
-              label="Games"
-              icon={<Icon size={24} color="white" name="playlist-add-check" />}
-            />
-            <Tab
-              barBackgroundColor="#37474F"
-              label="Set Up"
-              icon={<Icon size={24} color="white" name="playlist-add" />}
-            />
-            <Tab
-              barBackgroundColor="#37474F"
-              label="Stories"
-              icon={<Icon size={24} color="white" name="book" />}
-            />
-            </BottomNavigation>
-          </SidebarContainer>
-          */}
-
       </RulesView>
     )
   }

@@ -186,7 +186,7 @@ class Games extends React.Component {
         return (
             <ViewContainer>
                 <QuestionView>
-                  <QuestionRole>{witchNames}</QuestionRole>
+                  <QuestionRole>{witchNames} {witchIsAlive ? '' : '(Dead)'}</QuestionRole>
                   <QuestionText>Witch, this guy was bitten by Werewolf, do you want to heal him ?</QuestionText>
                 </QuestionView>
                 {
@@ -206,9 +206,10 @@ class Games extends React.Component {
                           })
                         }
                         </CustomView>
-                        : <View>
-                            <Text>DEAD</Text>
-                        </View>}
+                        :
+                        <View>
+                        </View>
+                      }
                 <QuestionView height={30}>
                   <QuestionText>Anyone you want to kill ?</QuestionText>
                 </QuestionView>
@@ -224,7 +225,7 @@ class Games extends React.Component {
                           })}
                         </ScrollView>
                        :
-                      <View>DEAD</View>
+                      <View></View>
                 }
                 <QuestionView height={30}>
                   <TouchableOpacity onPress={() => {
@@ -268,9 +269,15 @@ class Games extends React.Component {
                       )
                     })}
                   </CharacterContainer>
-                    : <View>
-                        <Button title="Next Role" onPress={this.props.nextOrder}/>
-                    </View>}
+                    :
+                    <QuestionView height={30}>
+                      <TouchableOpacity onPress={() => {
+                          this.props.nextOrder()
+                        }}>
+                        <QuestionText>Next</QuestionText>
+                      </TouchableOpacity>
+                    </QuestionView>
+                  }
             </ViewContainer>
         )
     }
@@ -298,9 +305,15 @@ class Games extends React.Component {
                                     )
                                 })}
                             </CharacterContainer>
-                        : <View>
-                            <Text>DEAD</Text>
-                        </View>}
+                        :
+                        <QuestionView height={30}>
+                          <TouchableOpacity onPress={() => {
+                              this.props.nextOrder()
+                            }}>
+                            <QuestionText>Next</QuestionText>
+                          </TouchableOpacity>
+                        </QuestionView>
+                    }
 
             </ViewContainer>
         )

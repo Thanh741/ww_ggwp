@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
   Platform,
@@ -13,12 +7,14 @@ import {
   TextInput,
   Picker
 } from 'react-native';
-import Routes from './components/Routes'
+// import Routes from './components/Routes'
 import Navigator from './components/navigator'
 import { Provider } from 'react-redux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import * as actionCreators  from './AppActionCreator'
+import { StackNavigator, addNavigationHelpers } from 'react-navigation'
+import Routes from './components/route'
 
 import {
   setCustomView,
@@ -27,14 +23,6 @@ import {
   setCustomImage,
   setCustomTouchableOpacity
 } from 'react-native-global-props';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
 
 type Props = {};
 
@@ -46,22 +34,37 @@ type Props = {};
 //   }
 // };
 // setCustomText(customTextProps);
+const AppNavigator = StackNavigator(Routes, {
+  initialRouteName: 'SetUp'
+});
+
+export const navReducer = (state, action) => {
+    const newState = AppNavigator.router.getStateForAction(action, state);
+    return newState || state;
+}
 
 class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Routes { ...this.props} />
+        <AppNavigator
+          navigation={addNavigationHelpers({
+                 dispatch: this.props.dispatch,
+                 state: this.props.nav
+             })}
+        />
       </View>
     );
   }
 }
 
-const mapDispatchToProps = (dispatch: Function) => bindActionCreators({
-  ...actionCreators
-}, dispatch)
+const mapStateToProps = (state) => {return {nav: state.nav}}
 
-export default connect(null, mapDispatchToProps)(App)
+const mapDispatchToProps =(dispatch: Function) => {
+  return Object.assign({dispatch: dispatch}, bindActionCreators(actionCreators, dispatch));
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
 
 const styles = StyleSheet.create({
   container: {

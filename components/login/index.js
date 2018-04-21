@@ -31,7 +31,7 @@ class Login extends Component {
     this.redirectToHome = this.redirectToHome.bind(this);
   }
   redirectToHome() {
-    Actions.home()
+    // Actions.home()
   }
   render() {
     return (

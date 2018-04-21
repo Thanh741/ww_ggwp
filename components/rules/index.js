@@ -11,7 +11,7 @@ import styled from 'styled-components'
 
 import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
 // import Icon from 'react-native-vector-icons/MaterialIcons'
-import { Actions } from 'react-native-router-flux'
+// import { Actions } from 'react-native-router-flux'
 
 const win = Dimensions.get('window');
 

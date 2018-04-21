@@ -12,8 +12,12 @@ import Navigator from './components/navigator'
 import { Provider } from 'react-redux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import * as actionCreators  from './AppActionCreator'
+// import * as actionCreators  from './AppActionCreator'
 import { StackNavigator, addNavigationHelpers } from 'react-navigation'
+import {
+  createReduxBoundAddListener,
+  createReactNavigationReduxMiddleware,
+} from 'react-navigation-redux-helpers';
 import Routes from './components/route'
 
 import {
@@ -26,14 +30,14 @@ import {
 
 type Props = {};
 
-// const customTextProps = {
-//   style: {
-//     fontSize: 16,
-//     fontFamily: Platform.OS === 'ios' ? 'Avenir Next LT Pro' : 'Roboto',
-//     color: 'black'
-//   }
-// };
-// setCustomText(customTextProps);
+const customTextProps = {
+  style: {
+    fontSize: 8,
+    fontFamily: Platform.OS === 'ios' ? 'Avenir Next LT Pro' : 'Roboto',
+    color: 'black'
+  }
+};
+setCustomText(customTextProps);
 const AppNavigator = StackNavigator(Routes, {
   initialRouteName: 'SetUp'
 });
@@ -42,6 +46,12 @@ export const navReducer = (state, action) => {
     const newState = AppNavigator.router.getStateForAction(action, state);
     return newState || state;
 }
+export const navigation = createReactNavigationReduxMiddleware(
+  "root",
+  state => state.nav,
+);
+
+const addListener = createReduxBoundAddListener("root");
 
 class App extends Component<Props> {
   render() {
@@ -50,7 +60,8 @@ class App extends Component<Props> {
         <AppNavigator
           navigation={addNavigationHelpers({
                  dispatch: this.props.dispatch,
-                 state: this.props.nav
+                 state: this.props.nav,
+                 addListener,
              })}
         />
       </View>
@@ -61,7 +72,7 @@ class App extends Component<Props> {
 const mapStateToProps = (state) => {return {nav: state.nav}}
 
 const mapDispatchToProps =(dispatch: Function) => {
-  return Object.assign({dispatch: dispatch}, bindActionCreators(actionCreators, dispatch));
+  return Object.assign({dispatch: dispatch});
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

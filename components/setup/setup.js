@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { View, Text, Image, TextInput, Dimensions, Button, TouchableOpacity } from 'react-native';
 
 import styled from 'styled-components'
-import { Actions } from 'react-native-router-flux'
+// import { Actions } from 'react-native-router-flux'
 import { color } from '../../resource'
 
 

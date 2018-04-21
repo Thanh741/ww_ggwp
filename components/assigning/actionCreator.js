@@ -1,4 +1,4 @@
-import { Router, Scene, Actions, Modal } from 'react-native-router-flux'
+// import { Router, Scene, Actions, Modal } from 'react-native-router-flux'
 
 export const nextPlayer = () => (dispatch, getState) => {
   const { players, current } = getState().assigning;

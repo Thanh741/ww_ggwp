@@ -1,5 +1,5 @@
 import { checkDeadStatus, checkDeadByPeople } from '../util/helper'
-import { Actions } from 'react-native-router-flux'
+// import { Actions } from 'react-native-router-flux'
 import { NavigationActions } from 'react-navigation'
 export const nextDay = () => (dispatch, getState) => {
   let { currentDay, currentShift, days } = getState().game

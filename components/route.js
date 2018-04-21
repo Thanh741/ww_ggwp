@@ -1,5 +1,5 @@
 import React from 'react'
-import { Router, Scene, Actions, Modal } from 'react-native-router-flux'
+// import { Router, Scene, Actions, Modal } from 'react-native-router-flux'
 import Rules from './rules'
 import Login from './login'
 import SetUp from './setup/container'

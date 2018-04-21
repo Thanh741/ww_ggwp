@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, Button, TouchableOpacity, Dimensions, TouchableHighlight, TouchableWithoutFeedback } from 'react-native'
 import styled from 'styled-components'
-import { Actions } from 'react-native-router-flux'
+// import { Actions } from 'react-native-router-flux'
 import { NavigationActions } from 'react-navigation'
 
 const win = Dimensions.get('window');

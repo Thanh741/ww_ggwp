@@ -13,6 +13,7 @@ const AssignView = styled.View`
 const RoleText = styled.Text`
   font-weight: bold;
   font-size: 36px;
+  opacity: ${(props) => props.showRole ? 0.9 : 0}
 `
 const NameText = styled.Text`
   font-size: 18px
@@ -68,7 +69,7 @@ class Assigning extends React.Component {
           this.setState({showRole: !showRole})
         }}>
           <CardView>
-            <RoleText>{ showRole ? player.role : ''}</RoleText>
+            <RoleText showRole={!!showRole}>{ player.role }</RoleText>
             <NameText>{player.name}</NameText>
           </CardView>
         </TouchableWithoutFeedback>

@@ -1,30 +1,33 @@
 import { checkDeadStatus, checkDeadByPeople } from '../util/helper'
-// import { Actions } from 'react-native-router-flux'
 import { NavigationActions } from 'react-navigation'
+import { AsyncStorage } from 'react-native';
+
 export const nextDay = () => (dispatch, getState) => {
   let { currentDay, currentShift, days } = getState().game
   const survivors =  days[days.length - 1].survivors.filter((survivor) => !checkDeadStatus(survivor.status)).map((survivor) => { return {...survivor, status: []}})
-  console.log('survivor', survivors);
   const werewolfAmount = survivors.filter(survivor => survivor.role === 'Werewolf').length
   //check is there is next day
-  if (werewolfAmount * 2 >= survivors.length) {
-    alert('GAME END WEREWOLF WIN')
+
+  let wereWolfWin = werewolfAmount * 2 >= survivors.length
+  let peopleWin = werewolfAmount === 0
+  if (wereWolfWin || peopleWin) {
+    if (wereWolfWin) {
+      alert('GAME END WEREWOLF WIN')
+    } else {
+      alert('GAME END PEOPLE WIN')
+    }
+    const saveData = getState().game.days
+    AsyncStorage.setItem(`@wereWolf:${Date.now()}`, JSON.stringify(saveData))
+
     dispatch({type: 'RESET_GAME'})
     dispatch({type: 'RESET_SETUP'})
     dispatch({type: 'RESET_ASSIGNING'})
     // Actions.project()
-    dispatch(NavigationActions.navigate({routeName: 'SetUp'}))
+
+    dispatch(NavigationActions.navigate({routeName: 'SavedGames'}))
     return;
   }
-  if (werewolfAmount === 0) {
-    alert('GAME END PEOPLE WIN')
-    dispatch({type: 'RESET_GAME'})
-    dispatch({type: 'RESET_SETUP'})
-    dispatch({type: 'RESET_ASSIGNING'})
-    // Actions.project()
-    dispatch(NavigationActions.navigate({routeName: 'SetUp'}))
-    return;
-  }
+
   const nextDay = {
     day: currentDay + 1,
     shift: 0,
@@ -51,6 +54,7 @@ export const nextOrder = () => (dispatch, getState) => {
     dispatch({type: 'NEXT_ORDER', payload: order + 1})
   }
 }
+
 const setStatus = (name, status, days, currentDay) => {
   console.log('// DEBUG: ');
   return days.map((day) => {
@@ -135,6 +139,7 @@ export const toggleDiscussion = () => (dispatch, getState) => {
   }
   dispatch({type: 'TOGGLE_DISCUSSION', payload: !discussion})
 }
+
 export const toggleVoting = () => (dispatch, getState) => {
   let { killingDiscussion } = getState().game
   dispatch({type: 'TOGGLE_VOTING', payload: !killingDiscussion})

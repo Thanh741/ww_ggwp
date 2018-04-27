@@ -20,26 +20,26 @@ import {
 } from 'react-navigation-redux-helpers';
 import Routes from './components/route'
 
-import {
-  setCustomView,
-  setCustomTextInput,
-  setCustomText,
-  setCustomImage,
-  setCustomTouchableOpacity
-} from 'react-native-global-props';
+// import {
+//   setCustomView,
+//   setCustomTextInput,
+//   setCustomText,
+//   setCustomImage,
+//   setCustomTouchableOpacity
+// } from 'react-native-global-props';
 
 type Props = {};
 
-const customTextProps = {
-  style: {
-    fontSize: 8,
-    fontFamily: Platform.OS === 'ios' ? 'Avenir Next LT Pro' : 'Roboto',
-    color: 'black'
-  }
-};
-setCustomText(customTextProps);
+// const customTextProps = {
+//   style: {
+//     fontSize: 14,
+//     fontFamily: 'Avenir Next LT Pro',
+//     color: 'black'
+//   }
+// };
+// setCustomText(customTextProps);
 const AppNavigator = StackNavigator(Routes, {
-  initialRouteName: 'SetUp'
+  initialRouteName: 'SavedGames'
 });
 
 export const navReducer = (state, action) => {

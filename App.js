@@ -13,7 +13,7 @@ import { Provider } from 'react-redux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 // import * as actionCreators  from './AppActionCreator'
-import { StackNavigator, addNavigationHelpers } from 'react-navigation'
+import { StackNavigator, addNavigationHelpers, TabNavigator } from 'react-navigation'
 import {
   createReduxBoundAddListener,
   createReactNavigationReduxMiddleware,
@@ -28,8 +28,6 @@ import Routes from './components/route'
 //   setCustomTouchableOpacity
 // } from 'react-native-global-props';
 
-type Props = {};
-
 // const customTextProps = {
 //   style: {
 //     fontSize: 14,
@@ -38,12 +36,17 @@ type Props = {};
 //   }
 // };
 // setCustomText(customTextProps);
-const AppNavigator = StackNavigator(Routes, {
-  initialRouteName: 'SavedGames'
-});
+
+type Props = {};
+
+// const AppNavigator = StackNavigator(Routes, {
+//   initialRouteName: 'Tabs',
+//   headerMode: 'none',
+//   mode: 'modal'
+// });
 
 export const navReducer = (state, action) => {
-    const newState = AppNavigator.router.getStateForAction(action, state);
+    const newState = Routes.router.getStateForAction(action, state);
     return newState || state;
 }
 export const navigation = createReactNavigationReduxMiddleware(
@@ -57,7 +60,7 @@ class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <AppNavigator
+        <Routes
           navigation={addNavigationHelpers({
                  dispatch: this.props.dispatch,
                  state: this.props.nav,

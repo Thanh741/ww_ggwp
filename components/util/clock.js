@@ -14,7 +14,7 @@ class Clock extends React.Component {
   constructor() {
     super()
     this.state = {
-      seconds: 9
+      seconds: 90
     }
   }
 

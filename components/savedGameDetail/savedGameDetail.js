@@ -27,7 +27,6 @@ class SavedGameDetail extends React.Component {
     })
   }
   render() {
-    console.log(this.props.game);
     if (this.props.game.day.length > 0) {
       return (
         <View>
@@ -36,7 +35,6 @@ class SavedGameDetail extends React.Component {
       )
     }
     return <View></View>
-
   }
 }
 

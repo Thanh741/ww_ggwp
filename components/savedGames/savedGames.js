@@ -1,9 +1,10 @@
 import React from 'react'
-import { View, Text, Button, TouchableOpacity, Dimensions, TouchableHighlight, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, Button, TouchableOpacity, Dimensions, TouchableHighlight, TouchableWithoutFeedback, ScrollView } from 'react-native'
 import styled from 'styled-components'
+import moment from 'moment'
 
 const win = Dimensions.get('window');
-const ListView = styled.View`
+const ListView = styled.ScrollView`
   background-color: white;
   height: ${win.height};
   display: flex;
@@ -30,10 +31,9 @@ class SavedGames extends React.Component {
               return (
                 <ItemView key={days.time}>
                   <TouchableOpacity onPress={() => {
-                      console.log('aaa');
                       this.props.redirectToDetail(days.time)
                     }}>
-                    <Text>{days.time}</Text>
+                    <Text>{moment(parseFloat(days.time.replace('@wereWolf:', ''))).format('MMMM Do YYYY, h:mm:ss a')}</Text>
                   </TouchableOpacity>
                 </ItemView>
               )

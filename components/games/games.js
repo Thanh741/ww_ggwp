@@ -406,15 +406,6 @@ class Games extends React.Component {
                             ? <Clock toggleDiscussion={this.props.toggleDiscussion}/>
                             : <View></View>}
                         {killingDiscussion
-                            ? <View></View>
-                            :
-                            <CenterView>
-                              <TouchableOpacity onPress={this.props.toggleVoting}>
-                                <BoldColorText>Vote</BoldColorText>
-                              </TouchableOpacity>
-                            </CenterView>
-                        }
-                        {killingDiscussion
                             ?
                             <CharacterContainer>
                               {

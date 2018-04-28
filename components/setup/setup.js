@@ -12,6 +12,7 @@ const win = Dimensions.get('window');
 const SetUpView = styled.View`
   flex: 1;
   background-color: ${color.white};
+  position: relative;
 `
 const TextNumber = styled.Text`
   color: #616161;
@@ -19,6 +20,7 @@ const TextNumber = styled.Text`
   text-align: right;
   font-size: 18px;
   font-family: 'Avenir Next LT Pro';
+
 `;
 const Container = styled.View`
   height: ${(prop) => prop.height};
@@ -80,15 +82,25 @@ const TextView = styled.View`
   margin-top: 40px;
   margin-bottom: 12px;
 `
+const TextViewBot = styled.View`
+  margin-bottom: 40px;
+`
 const TextInputCustom = styled.TextInput`
   background: #D8D8D8;
   height: ${win.height - 400}
-  padding: 15px;
+  padding: 20px 15px;
   font-size: 15px;
 `
 const NextButton = styled.Button`
   color: black
 `
+const NumberHelper = styled.View`
+  position: absolute
+  bottom: 0;
+  right: 0;
+  z-index: 99
+`
+
 
 class SetUp extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -178,14 +190,14 @@ class SetUp extends Component {
                 <PlayersNumber
                   active
                   key={i}
-                  onPress={()=> {this.props.updatePlayerNumber(i)}}
+                  onPress={()=> {this.props.updatePlayerNumber(i); this.setPlayerNumber(i)}}
                   >
                   <PlayerNumberTextBold>{i}</PlayerNumberTextBold>
                 </PlayersNumber>
               :
                 <PlayersNumber
                   key={i}
-                  onPress={()=> {this.props.updatePlayerNumber(i)}}
+                  onPress={()=> {this.props.updatePlayerNumber(i); this.setPlayerNumber(i)}}
                   >
                   <PlayerNumberText>{i}</PlayerNumberText>
                 </PlayersNumber>
@@ -194,8 +206,12 @@ class SetUp extends Component {
           </Container>
           <Container height={100}>
             <TextView>
-              <TextNumber>player <PlayerNumberTextBold>names</PlayerNumberTextBold></TextNumber>
+              <TextNumber>player <PlayerNumberTextBold>names</PlayerNumberTextBold>
+              </TextNumber>
             </TextView>
+            <NumberHelper>
+              <TextNumber>{`${this.state.playerLength} / ${this.state.playerNumber}`}</TextNumber>
+            </NumberHelper>
             <TextInputCustom
               multiline={true}
               numberOfLines={2}

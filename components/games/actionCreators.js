@@ -23,8 +23,11 @@ export const nextDay = () => (dispatch, getState) => {
     dispatch({type: 'RESET_SETUP'})
     dispatch({type: 'RESET_ASSIGNING'})
     // Actions.project()
-
-    dispatch(NavigationActions.navigate({routeName: 'SavedGames'}))
+    const reset = NavigationActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({routeName: 'SetUp'})]
+    })
+    dispatch(reset)
     return;
   }
 

@@ -42,7 +42,7 @@ class SavedGames extends React.Component {
         </ListView>
       )
     } else {
-      return <View>NO THING TO SHOW</View>
+      return <View><Text>NO THING TO SHOW</Text></View>
     }
   }
 }

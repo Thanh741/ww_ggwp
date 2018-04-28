@@ -14,10 +14,11 @@ const SetUpView = styled.View`
   background-color: ${color.white};
 `
 const TextNumber = styled.Text`
-  color: ${color.black};
+  color: #616161;
   padding-right: 15px
   text-align: right;
-  font-size: 14px;
+  font-size: 18px;
+  font-family: 'Avenir Next LT Pro';
 `;
 const Container = styled.View`
   height: ${(prop) => prop.height};
@@ -57,14 +58,22 @@ const InputStyling = styled.TextInput`
 `;
 const PlayerNumberText = styled.Text`
   font-weight: ${(props) => props.active ? 'bold' : 'normal'};
-  font-size: 14px;
+  font-size: 12px;
+  font-family: 'Avenir Next LT Pro';
+`;
+const PlayerRoleText = styled.Text`
+  font-weight: ${(props) => props.active ? 'bold' : 'normal'};
+  font-size: 20px;
+  font-family: 'Avenir Next LT Pro';
 `;
 const PlayerNumberTextBold = styled.Text`
   font-weight: bold;
-  font-size: 14px;
+  font-size: 18px;
+  font-family: 'Avenir Next LT Pro';
 `
 const PlayerNumberTextActive = styled.Text`
-font-weight: bold
+font-weight: bold;
+font-family: 'Avenir Next LT Pro';
 `;
 
 const TextView = styled.View`
@@ -77,16 +86,19 @@ const TextInputCustom = styled.TextInput`
   padding: 15px;
   font-size: 15px;
 `
+const NextButton = styled.Button`
+  color: black
+`
 
 class SetUp extends Component {
   static navigationOptions = ({ navigation }) => {
     const params = navigation.state.params || {}
     return {
-      title: 'Set Up',
       headerRight: (
-        <Button
+        <NextButton
           title="Next"
           onPress={ params.nextScreen }
+          color="#4A4A4A"
         />
       )
     }
@@ -138,7 +150,6 @@ class SetUp extends Component {
     }
   }
   render() {
-    console.log('this.props', this.props);
     return (
       <SetUpView>
           <Container height={180}>
@@ -152,7 +163,7 @@ class SetUp extends Component {
                   onPress={()=> {this.setRoles(i.name)}}
                   active={i.active}
                 >
-                  <PlayerNumberText active={i.active}>{i.name}</PlayerNumberText>
+                  <PlayerRoleText active={i.active}>{i.name}</PlayerRoleText>
                 </Picker>
               )}
             </ListPickers>
@@ -162,7 +173,7 @@ class SetUp extends Component {
               <TextNumber>player <PlayerNumberTextBold>numbers</PlayerNumberTextBold></TextNumber>
             </TextView>
             <ListPlayerNumbers>
-              {[7, 8, 9, 10, 11, 12].map((i) =>
+              {[7, 8, 9, 10, 11, 12, 13, 14, 15].map((i) =>
                 i == this.props.playerNumber ?
                 <PlayersNumber
                   active

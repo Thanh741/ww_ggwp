@@ -13,10 +13,12 @@ const AssignView = styled.View`
 const RoleText = styled.Text`
   font-weight: bold;
   font-size: 36px;
-  opacity: ${(props) => props.showRole ? 0.9 : 0}
+  opacity: ${(props) => props.showRole ? 0.9 : 0};
+  fontFamily: 'Avenir Next LT Pro';
 `
 const NameText = styled.Text`
-  font-size: 18px
+  font-size: 18px;
+  fontFamily: 'Avenir Next LT Pro';
 `
 
 const CardView = styled.View`
@@ -34,10 +36,12 @@ const CusView = styled.View`
   padding: 5px;
 `
 const CustomText = styled.Text`
-  font-size: 14px
+  font-size: 14px;
+  fontFamily: 'Avenir Next LT Pro';
 `
 const BoldText = styled.Text`
-  font-weight: bold
+  font-weight: bold;
+  fontFamily: 'Avenir Next LT Pro';
 `
 class Assigning extends React.Component {
   constructor() {
@@ -47,7 +51,6 @@ class Assigning extends React.Component {
     }
   }
   componentWillMount() {
-    console.log('a');
     // Actions.reset('assigning')
     // Actions.replace('assigning')
   }
@@ -74,15 +77,7 @@ class Assigning extends React.Component {
           </CardView>
         </TouchableWithoutFeedback>
         <CusView>
-          {
-            showRole ?
-              <View>
-                <CustomText>Press the card again and</CustomText>
-                <CustomText><BoldText>give the phone</BoldText> to your <BoldText>next</BoldText> friend</CustomText>
-              </View>
-            : <CustomText>Press the card to <BoldText>show</BoldText> your role</CustomText>
-          }
-
+          <CustomText>Press the card to <BoldText>show</BoldText> your role</CustomText>
         </CusView>
       </AssignView>
     )

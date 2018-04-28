@@ -31,21 +31,17 @@ const ViewContainer = styled.View `
 `
 const DayCard = styled.View`
 background-color: #F8E71C;
-height: ${win.height - 200};
-margin: 18px 20px;
-border-radius: 4px;
 box-shadow: 1px 2px 2px #aaaa;
 display: flex;
 flexDirection: column;
+height: ${win.height};
 `
 const NightCard = styled.View`
   background-color: #30435A;
-  height: ${win.height - 200};
-  margin: 18px 20px;
-  border-radius: 4px;
   box-shadow: 1px 2px 2px #aaaa;
   display: flex;
   flexDirection: column;
+  height: ${win.height};
 `
 const CurrentDay = styled.View`
   margin: 40px 30px;
@@ -54,19 +50,25 @@ const CurrentDay = styled.View`
 const CurrentDayText = styled.Text`
   font-size: 30px;
   font-weight: bold;
+  fontFamily: 'Avenir Next LT Pro';
+  color: ${(props) => props.shift ? '#4A4A4A' : '#DADADA'}
 `
 const SurvivorLeft = styled.Text`
   margin-top: 15px;
   font-size: 18px;
+  fontFamily: 'Avenir Next LT Pro';
+  color: ${(props) => props.shift ? '#4A4A4A' : '#DADADA'}
 `
 const QuestionView = styled.View`
   height: ${(props) => { return props.height || '75px' }};
-  background-color: #F8E71C;
+  background-color: #2A3B4F;
   alignItems: flex-end;
   width: 100%;
   padding: 0px 10px;
 `
 const QuestionRole = styled.Text`
+  color: ${(props) => props.shift ? '#4A4A4A' : '#2A3B4F'}
+  fontFamily: 'Avenir Next LT Pro';
   font-weight: bold;
   margin-top: 5px;
   text-align: right;
@@ -75,18 +77,24 @@ const QuestionRole = styled.Text`
 const QuestionText = styled.Text`
   margin-top: 10px;
   font-size: 13px;
+  fontFamily: 'Avenir Next LT Pro';
+  color: ${(props) => props.shift ? '#4A4A4A' : '#ABA8A8'}
 `
 const BoldText =  styled.Text`
   font-weight: bold;
   color: #FF5F5F;
+  fontFamily: 'Avenir Next LT Pro';
+  color: ${(props) => props.shift ? '#4A4A4A' : '#DADADA'}
 `
 const BoldColorText = styled.Text`
   font-weight: bold;
   color: black;
+  fontFamily: 'Avenir Next LT Pro';
+  color: ${(props) => props.shift ? '#4A4A4A' : '#DADADA'}
 `
 const Character = styled.TouchableOpacity`
   height: 60px;
-  background-color: #D8D8D8;
+  backgroundColor: ${(props) => props.shift ? '#FBEC33' : '#2A3B4F'}
   alignItems: center;
   justifyContent: center;
   margin: 5px 5px;
@@ -102,10 +110,14 @@ const CharacterContainer = styled.View`
 `
 const CustomText = styled.Text`
   font-size: 14px;
+  fontFamily: 'Avenir Next LT Pro';
+  color: ${(props) => props.shift ? '#4A4A4A' : '#DADADA'}
 `
 const CustomTextRole = styled.Text`
   font-size: 14px;
   font-weight: bold;
+  fontFamily: 'Avenir Next LT Pro';
+  color: ${(props) => props.shift ? '#4A4A4A' : '#DADADA'}
 `
 const CustomView = styled.View`
   alignItems: center;
@@ -122,6 +134,12 @@ const CenterView = styled.View`
 `
 
 class Games extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    const params = navigation.state.params || {}
+    return {
+      tabBarVisible: false
+    }
+  };
     constructor() {
         super();
         this.state = {
@@ -159,8 +177,8 @@ class Games extends React.Component {
                 <CharacterContainer>
                   {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor, index) => {
                       return (
-                          <Character key={survivor.name} onPress={killByWerewolf.bind('', survivor.name)}>
-                              <CustomText>{survivor.name}</CustomText>
+                          <Character key={survivor.name} onPress={killByWerewolf.bind('', survivor.name)} shift={currentShift}>
+                              <CustomText shift={currentShift}>{survivor.name}</CustomText>
                           </Character>
                       )
                   })}
@@ -197,8 +215,8 @@ class Games extends React.Component {
                             today.survivors.filter(survivor => (survivor.status.indexOf('deadByWerewolf') > -1 && !checkDeadByPeople(survivor.status))).map((survivor) => {
                               if (witchUseSave) return <View>{survivor.name}</View>
                               return (
-                                  <Character key={survivor.name} onPress={() => { this.setState({witchSave: survivor.name}) } }>
-                                    <CustomText>
+                                  <Character key={survivor.name} onPress={() => { this.setState({witchSave: survivor.name}) } } shift={currentShift}>
+                                    <CustomText shift={currentShift}>
                                       { this.state.witchSave === survivor.name ? <BoldColorText>{survivor.name}</BoldColorText> : survivor.name }
                                     </CustomText>
                                   </Character>
@@ -218,8 +236,8 @@ class Games extends React.Component {
                           {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor) => {
                               if(witchUseKill) return <View></View>
                               return (
-                                  <Character key={survivor.name} onPress={() => {this.setState({witchKill: survivor.name})}}>
-                                    <CustomText>{ this.state.witchKill === survivor.name ? <BoldColorText>{survivor.name}</BoldColorText> : survivor.name}</CustomText>
+                                  <Character key={survivor.name} onPress={() => {this.setState({witchKill: survivor.name})}} shift={currentShift}>
+                                    <CustomText shift={currentShift}>{ this.state.witchKill === survivor.name ? <BoldColorText>{survivor.name}</BoldColorText> : survivor.name}</CustomText>
                                   </Character>
                               )
                           })}
@@ -264,7 +282,7 @@ class Games extends React.Component {
                     {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status) && healedYesterday !== survivor.name).map((survivor) => {
                       return (
                         <Character key={survivor.name} onPress={healByDoctor.bind('', survivor.name)}>
-                          <CustomText>{survivor.name}</CustomText>
+                          <CustomText shift={currentShift}>{survivor.name}</CustomText>
                         </Character>
                       )
                     })}
@@ -298,7 +316,7 @@ class Games extends React.Component {
                                 {today.survivors.filter((survivor) => !checkDeadByPeople(survivor.status)).map((survivor) => {
                                     return (
                                         <Character key={survivor.name} onPress={this.props.nextOrder}>
-                                            <CustomText>{survivor.name}</CustomText>
+                                            <CustomText shift={currentShift}>{survivor.name}</CustomText>
                                             <CustomTextRole>{survivor.role}</CustomTextRole>
                                             {/*<Button title="Predict" onPress={seeBySeer.bind('', survivor.name)}/>  */}
                                         </Character>
@@ -336,7 +354,7 @@ class Games extends React.Component {
     }
 
     renderWhoDieLastNight() {
-        const {days, currentDay} = this.props
+        const {days, currentDay, currentShift} = this.props
         const yesterday = days.filter(i => i.day === (currentDay - 1))[0]
         const survivor = yesterday.survivors.filter(survivor => checkDeadStatusLastNight(survivor.status))
         if (survivor.length === 1) {
@@ -357,10 +375,11 @@ class Games extends React.Component {
     }
 
     renderWhoWillDie(today) {
+      const { currentShift } = this.props
         return today.survivors.map((survivor) => {
             return (
-                  <Character onPress={this.props.killByPeople.bind('', survivor.name)} key={survivor.name}>
-                      <CustomText>
+                  <Character onPress={this.props.killByPeople.bind('', survivor.name)} key={survivor.name} shift={currentShift}>
+                      <CustomText shift={currentShift}>
                         {survivor.name}
                       </CustomText>
                   </Character>
@@ -386,18 +405,18 @@ class Games extends React.Component {
                 {currentShift
                     ? <DayCard>
                         <CurrentDay>
-                          <CurrentDayText> Day {currentDay} </CurrentDayText>
-                          <SurvivorLeft>
-                            <BoldColorText> {this.renderWhoDieLastNight()}</BoldColorText> was dead last night
+                          <CurrentDayText shift={currentShift}> Day {currentDay} </CurrentDayText>
+                          <SurvivorLeft shift={currentShift}>
+                            <BoldColorText shift={currentShift}> {this.renderWhoDieLastNight()}</BoldColorText> was dead last night
                           </SurvivorLeft>
-                          <SurvivorLeft>There are <BoldColorText>{today.survivorsAmount} </BoldColorText>survivors left</SurvivorLeft>
+                          <SurvivorLeft shift={currentShift}>There are <BoldColorText shift={currentShift}>{today.survivorsAmount} </BoldColorText>survivors left</SurvivorLeft>
                         </CurrentDay>
                         {discussion
                             ? <View></View>
                             :
                             <CenterView>
                               <TouchableOpacity onPress={this.props.toggleDiscussion}>
-                                <BoldColorText>Discuss</BoldColorText>
+                                <BoldColorText shift={currentShift}>Discuss</BoldColorText>
                               </TouchableOpacity>
                             </CenterView>
 

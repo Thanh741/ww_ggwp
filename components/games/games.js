@@ -60,14 +60,13 @@ const SurvivorLeft = styled.Text`
   color: ${(props) => props.shift ? '#4A4A4A' : '#DADADA'}
 `
 const QuestionView = styled.View`
-  height: ${(props) => { return props.height || '75px' }};
   background-color: #2A3B4F;
   alignItems: flex-end;
   width: 100%;
-  padding: 0px 10px;
+  padding: 10px;
 `
 const QuestionRole = styled.Text`
-  color: ${(props) => props.shift ? '#4A4A4A' : '#2A3B4F'}
+  color: #DADADA;
   fontFamily: 'Avenir Next LT Pro';
   font-weight: bold;
   margin-top: 5px;
@@ -78,7 +77,7 @@ const QuestionText = styled.Text`
   margin-top: 10px;
   font-size: 13px;
   fontFamily: 'Avenir Next LT Pro';
-  color: ${(props) => props.shift ? '#4A4A4A' : '#ABA8A8'}
+  color: #DADADA;
 `
 const BoldText =  styled.Text`
   font-weight: bold;
@@ -109,6 +108,7 @@ const CharacterContainer = styled.View`
   justifyContent: center;
 `
 const CustomText = styled.Text`
+  font-weight: bold;
   font-size: 14px;
   fontFamily: 'Avenir Next LT Pro';
   color: ${(props) => props.shift ? '#4A4A4A' : '#DADADA'}
@@ -228,7 +228,7 @@ class Games extends React.Component {
                         <View>
                         </View>
                       }
-                <QuestionView height={30}>
+                <QuestionView>
                   <QuestionText>Anyone you want to kill ?</QuestionText>
                 </QuestionView>
                 { witchIsAlive ?
@@ -245,14 +245,14 @@ class Games extends React.Component {
                        :
                       <View></View>
                 }
-                <QuestionView height={30}>
+                <QuestionView>
                   <TouchableOpacity onPress={() => {
                       const {witchSave, witchKill} = this.state;
                       if (witchSave) this.props.saveByWitch(witchSave)
                       if (witchKill) this.props.killByWitch(witchKill)
                       this.props.nextOrder()
                     }}>
-                    <QuestionText>Next</QuestionText>
+                    <BoldText>NEXT</BoldText>
                   </TouchableOpacity>
                 </QuestionView>
             </ViewContainer>

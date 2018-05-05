@@ -10,6 +10,7 @@ import Game from './games/container'
 import Assigning from './assigning/container'
 import SavedGames from './savedGames/container'
 import DetailGame from './savedGameDetail/container'
+import EndGame from './endGame/container'
 
 const ListStack = StackNavigator({
   SavedGames: { screen: SavedGames },
@@ -29,6 +30,7 @@ const SetUpStack = StackNavigator({
   Assigning: { screen: Assigning },
   SetUp: { screen: SetUpModal },
   Game: {screen: Game},
+  EndGame: {screen: EndGame}
 }, {
   initialRouteName: 'SetUp',
   headerMode: 'none',

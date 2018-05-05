@@ -26,21 +26,19 @@ const GameView = styled.View `
 `
 const ViewContainer = styled.View `
   display: flex;
-  flexDirection: column;
   alignItems: flex-start;
+  flexDirection: column
 `
 const DayCard = styled.View`
 background-color: #F8E71C;
 box-shadow: 1px 2px 2px #aaaa;
 display: flex;
-flexDirection: column;
 height: ${win.height};
 `
 const NightCard = styled.View`
   background-color: #30435A;
   box-shadow: 1px 2px 2px #aaaa;
   display: flex;
-  flexDirection: column;
   height: ${win.height};
 `
 const CurrentDay = styled.View`
@@ -60,7 +58,7 @@ const SurvivorLeft = styled.Text`
   color: ${(props) => props.shift ? '#4A4A4A' : '#DADADA'}
 `
 const QuestionView = styled.View`
-  background-color: #2A3B4F;
+  background-color: ${(props) => props.shift ? '#EAB629' :'#2A3B4F'};
   alignItems: flex-end;
   width: 100%;
   padding: 10px;
@@ -69,15 +67,15 @@ const QuestionRole = styled.Text`
   color: #DADADA;
   fontFamily: 'Avenir Next LT Pro';
   font-weight: bold;
-  margin-top: 5px;
-  text-align: right;
+  margin-top: 2px;
+  text-align: left;
 `
 
 const QuestionText = styled.Text`
-  margin-top: 10px;
-  font-size: 13px;
+  margin-top: 5px;
+  font-size: 15px;
   fontFamily: 'Avenir Next LT Pro';
-  color: #DADADA;
+  color: ${(props) => props.shift ? '#4A4A4A' : '#DADADA'}
 `
 const BoldText =  styled.Text`
   font-weight: bold;
@@ -91,9 +89,16 @@ const BoldColorText = styled.Text`
   fontFamily: 'Avenir Next LT Pro';
   color: ${(props) => props.shift ? '#4A4A4A' : '#DADADA'}
 `
+const DiscussButtonText =  styled(BoldColorText)`
+  font-size: 20px;
+`
+const WitchText = styled(BoldColorText)`
+  color: orange
+`
+
 const Character = styled.TouchableOpacity`
   height: 60px;
-  backgroundColor: ${(props) => props.shift ? '#FBEC33' : '#2A3B4F'}
+  backgroundColor: ${(props) => props.shift ? '#EAB629' : '#2A3B4F'}
   alignItems: center;
   justifyContent: center;
   margin: 5px 5px;
@@ -105,7 +110,7 @@ const CharacterContainer = styled.View`
   flex-wrap: wrap;
   flexDirection: row;
   margin-top: 20px;
-  justifyContent: center;
+  min-height: 35px;
 `
 const CustomText = styled.Text`
   font-weight: bold;
@@ -131,6 +136,13 @@ const CenterView = styled.View`
   justifyContent: center;
   alignItems: center;
   display: flex;
+  flexDirection: row;
+`
+const DiscussButton = styled.View`
+  alignSelf: baseline;
+  background: orange;
+  padding: 10px 15px;
+  border-radius: 3px;
 `
 
 class Games extends React.Component {
@@ -153,6 +165,7 @@ class Games extends React.Component {
         this.renderPhase = this.renderPhase.bind(this)
         this.renderWhoDieLastNight = this.renderWhoDieLastNight.bind(this)
         this.renderWhoWillDie = this.renderWhoWillDie.bind(this)
+        this.renderDissusion = this.renderDissusion.bind(this)
     }
 
     renderWerewolfPhase(today) {
@@ -217,7 +230,7 @@ class Games extends React.Component {
                               return (
                                   <Character key={survivor.name} onPress={() => { this.setState({witchSave: survivor.name}) } } shift={currentShift}>
                                     <CustomText shift={currentShift}>
-                                      { this.state.witchSave === survivor.name ? <BoldColorText>{survivor.name}</BoldColorText> : survivor.name }
+                                      { this.state.witchSave === survivor.name ? <WitchText>{survivor.name}</WitchText> : survivor.name }
                                     </CustomText>
                                   </Character>
                               )
@@ -237,7 +250,7 @@ class Games extends React.Component {
                               if(witchUseKill) return <View></View>
                               return (
                                   <Character key={survivor.name} onPress={() => {this.setState({witchKill: survivor.name})}} shift={currentShift}>
-                                    <CustomText shift={currentShift}>{ this.state.witchKill === survivor.name ? <BoldColorText>{survivor.name}</BoldColorText> : survivor.name}</CustomText>
+                                    <CustomText shift={currentShift}>{ this.state.witchKill === survivor.name ? <WitchText>{survivor.name}</WitchText> : survivor.name}</CustomText>
                                   </Character>
                               )
                           })}
@@ -288,7 +301,7 @@ class Games extends React.Component {
                     })}
                   </CharacterContainer>
                     :
-                    <QuestionView height={30}>
+                    <QuestionView>
                       <TouchableOpacity onPress={() => {
                           this.props.nextOrder()
                         }}>
@@ -324,7 +337,7 @@ class Games extends React.Component {
                                 })}
                             </CharacterContainer>
                         :
-                        <QuestionView height={30}>
+                        <QuestionView>
                           <TouchableOpacity onPress={() => {
                               this.props.nextOrder()
                             }}>
@@ -351,6 +364,41 @@ class Games extends React.Component {
             default:
                 return <View></View>
         }
+    }
+
+    renderDissusion(status, today) {
+      const { currentShift } = this.props
+      switch (status) {
+        case 'ready':
+          return (
+            <CenterView>
+              <DiscussButton>
+                <TouchableOpacity onPress={this.props.toggleDiscussion.bind(null, 'clock')}>
+                  <DiscussButtonText shift={currentShift}>Discuss</DiscussButtonText>
+                </TouchableOpacity>
+              </DiscussButton>
+            </CenterView>)
+        case 'clock': return <Clock toggleDiscussion={this.props.toggleDiscussion.bind(null, 'voting')}/>
+        case 'voting': return (
+          <ViewContainer>
+            <QuestionView shift={currentShift}>
+              <QuestionText shift={currentShift}>Who will be hung today ?</QuestionText>
+            </QuestionView>
+              <CharacterContainer>
+                { this.renderWhoWillDie(today) }
+                <QuestionView shift={currentShift}>
+                  <TouchableOpacity onPress={() => {
+                      this.props.changeShift()
+                    }}>
+                    <BoldText shift={currentShift}>NEXT</BoldText>
+                  </TouchableOpacity>
+                </QuestionView>
+              </CharacterContainer>
+
+          </ViewContainer>
+        )
+        default: return <View></View>
+      }
     }
 
     renderWhoDieLastNight() {
@@ -393,7 +441,6 @@ class Games extends React.Component {
             currentShift,
             days = [],
             discussion,
-            killingDiscussion
         } = this.props
         const today = days.filter(i => i.day === currentDay)[0]
         if (!today)
@@ -411,27 +458,7 @@ class Games extends React.Component {
                           </SurvivorLeft>
                           <SurvivorLeft shift={currentShift}>There are <BoldColorText shift={currentShift}>{today.survivorsAmount} </BoldColorText>survivors left</SurvivorLeft>
                         </CurrentDay>
-                        {discussion
-                            ? <View></View>
-                            :
-                            <CenterView>
-                              <TouchableOpacity onPress={this.props.toggleDiscussion}>
-                                <BoldColorText shift={currentShift}>Discuss</BoldColorText>
-                              </TouchableOpacity>
-                            </CenterView>
-
-                        }
-                        {discussion
-                            ? <Clock toggleDiscussion={this.props.toggleDiscussion}/>
-                            : <View></View>}
-                        {killingDiscussion
-                            ?
-                            <CharacterContainer>
-                              {
-                                this.renderWhoWillDie(today)
-                              }
-                          </CharacterContainer>
-                            : <View></View>}
+                        {this.renderDissusion(discussion, today)}
                       </DayCard>
                     : <NightCard>
                         <CurrentDay>

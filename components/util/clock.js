@@ -3,13 +3,22 @@ import { View, Text, Image, TextInput, Dimensions, Button, TouchableOpacity } fr
 import styled from 'styled-components'
 
 const CenterView = styled.View `
-  flex: 1;
   alignItems: center;
   justifyContent: center;
+  display:flex;
+  flexDirection: column;
 `
 const BoldColorText = styled.Text`
   font-weight: bold;
+  fontFamily: 'Avenir Next LT Pro';
+  font-size: 25px
 `
+const DiscussButton = styled.View`
+  background: orange;
+  padding: 10px 15px;
+  border-radius: 3px;
+`
+
 class Clock extends React.Component {
   constructor() {
     super()
@@ -21,7 +30,6 @@ class Clock extends React.Component {
   componentDidMount () {
     this._cancelInterval = setInterval(() => {
       const seconds = this.state.seconds - 1
-      console.log('here', seconds);
       this.setState({seconds})
       if (seconds === 0) {
         clearInterval(this._cancelInterval)
@@ -38,10 +46,12 @@ class Clock extends React.Component {
     let { seconds } = this.state
     return (
       <CenterView>
-        <BoldColorText>{seconds}</BoldColorText>
-        <TouchableOpacity onPress={this.props.toggleDiscussion}>
-          <BoldColorText>Stop</BoldColorText>
-        </TouchableOpacity>
+        <BoldColorText>{seconds + 's'}</BoldColorText>
+        <DiscussButton>
+          <TouchableOpacity onPress={this.props.toggleDiscussion}>
+            <BoldColorText>Stop</BoldColorText>
+          </TouchableOpacity>
+        </DiscussButton>
       </CenterView>
     )
   }

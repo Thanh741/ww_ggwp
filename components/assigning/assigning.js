@@ -13,8 +13,9 @@ const AssignView = styled.View`
 const RoleText = styled.Text`
   font-weight: bold;
   font-size: 36px;
-  opacity: ${(props) => props.showRole ? 0.9 : 0};
+  opacity: ${(props) => props.showRole ? 1 : 0};
   fontFamily: 'Avenir Next LT Pro';
+  color: #4A4A4A;
 `
 const NameText = styled.Text`
   font-size: 18px;

@@ -9,8 +9,7 @@ const initialState = {
     minutes: 2,
     seconds: 30
   },
-  killingDiscussion: false,
-  discussion: false,
+  discussion: 'ready',
   witchUseKill: false,
   witchUseSave: false,
   healedYesterday: '',
@@ -47,13 +46,7 @@ const gameReducer = (state = initialState, action) => {
         currentShift: action.payload.currentShift,
         days: action.payload.days,
         order: action.payload.order,
-        discussion: false,
-        killingDiscussion: false
-      }
-    case 'TOGGLE_VOTING':
-      return {
-        ...state,
-        killingDiscussion: action.payload
+        discussion: 'ready',
       }
     case 'TOGGLE_DISCUSSION':
       return {

@@ -15,10 +15,31 @@ const ItemView =  styled.View`
   padding: 10px;
   margin-bottom: 1px;
 `
+const NextButton = styled.Button`
+  color: black;
+`
+const NextViewButton = styled.View`
+  margin-right: 10px;
+`
 
 class SavedGames extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    const params = navigation.state.params || {}
+    return {
+      headerRight: (
+        <NextViewButton>
+          <NextButton
+            title="Reload"
+            onPress={ params.reload }
+            color="#4A4A4A"
+          />
+        </NextViewButton>
+      )
+    }
+  };
   componentWillMount() {
     this.props.loadSavedGames()
+    this.props.navigation.setParams({ reload: this.props.loadSavedGames });
   }
   render() {
     const { games } = this.props

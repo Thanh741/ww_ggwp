@@ -43,9 +43,8 @@ const Picker = styled.TouchableOpacity`
 
 const ListPlayerNumbers = styled.TouchableOpacity`
   margin: 0px 0px 50px 0px;
-  flex: 1;
   flexDirection: row;
-  height: 150;
+  height: 150px;
 `
 const PlayersNumber = styled.TouchableOpacity`
   flex: 1;
@@ -53,7 +52,7 @@ const PlayersNumber = styled.TouchableOpacity`
   background: #D8D8D8;
   justifyContent: center;
   backgroundColor: ${(props) => props.active ? '#F8E71C' : '#D8D8D8'};
-  height: 35;
+  height: 35px;
 `;
 
 const InputStyling = styled.TextInput`
@@ -62,20 +61,24 @@ const PlayerNumberText = styled.Text`
   font-weight: ${(props) => props.active ? 'bold' : 'normal'};
   font-size: 12px;
   font-family: 'Avenir Next LT Pro';
+  color: #4A4A4A;
 `;
 const PlayerRoleText = styled.Text`
   font-weight: ${(props) => props.active ? 'bold' : 'normal'};
   font-size: 20px;
   font-family: 'Avenir Next LT Pro';
+  color: #4A4A4A;
 `;
 const PlayerNumberTextBold = styled.Text`
   font-weight: bold;
   font-size: 18px;
   font-family: 'Avenir Next LT Pro';
+  color: #4A4A4A;
 `
 const PlayerNumberTextActive = styled.Text`
 font-weight: bold;
 font-family: 'Avenir Next LT Pro';
+color: #4A4A4A;
 `;
 
 const TextView = styled.View`
@@ -92,8 +95,12 @@ const TextInputCustom = styled.TextInput`
   font-size: 15px;
 `
 const NextButton = styled.Button`
-  color: black
+  color: black;
 `
+const NextViewButton = styled.View`
+  margin-right: 10px;
+`
+
 const NumberHelper = styled.View`
   position: absolute
   bottom: 0;
@@ -107,11 +114,13 @@ class SetUp extends Component {
     const params = navigation.state.params || {}
     return {
       headerRight: (
-        <NextButton
-          title="Next"
-          onPress={ params.nextScreen }
-          color="#4A4A4A"
-        />
+        <NextViewButton>
+          <NextButton
+            title="Next"
+            onPress={ params.nextScreen }
+            color="#4A4A4A"
+          />
+        </NextViewButton>
       )
     }
   };

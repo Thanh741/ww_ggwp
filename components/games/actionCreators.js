@@ -2,35 +2,35 @@ import { checkDeadStatus, checkDeadByPeople } from '../util/helper'
 import { NavigationActions } from 'react-navigation'
 import { AsyncStorage } from 'react-native';
 
-export const nextDay = () => (dispatch, getState) => {
-  let { currentDay, currentShift, days } = getState().game
+const checkResult = (days) => {
   const survivors =  days[days.length - 1].survivors.filter((survivor) => !checkDeadStatus(survivor.status)).map((survivor) => { return {...survivor, status: []}})
   const werewolfAmount = survivors.filter(survivor => survivor.role === 'Werewolf').length
-  //check is there is next day
-
   let wereWolfWin = werewolfAmount * 2 >= survivors.length
   let peopleWin = werewolfAmount === 0
   if (wereWolfWin || peopleWin) {
     if (wereWolfWin) {
-      alert('GAME END WEREWOLF WIN')
+      return 'wereWolfWin'
     } else {
-      alert('GAME END PEOPLE WIN')
+      return 'peopleWin'
     }
-    const saveData = getState().game.days
-    AsyncStorage.setItem(`@wereWolf:${Date.now()}`, JSON.stringify(saveData))
+  } else {
+    return survivors
+  }
+}
 
-    dispatch({type: 'RESET_GAME'})
-    dispatch({type: 'RESET_SETUP'})
-    dispatch({type: 'RESET_ASSIGNING'})
-    // Actions.project()
-    const reset = NavigationActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({routeName: 'SetUp'})]
-    })
-    dispatch(reset)
+export const nextDay = () => (dispatch, getState) => {
+  let { currentDay, currentShift, days } = getState().game
+  const survivors = checkResult(days)
+  if (typeof survivors === 'string') {
+    // dispatch(saveGame())
+    const navigateAction = NavigationActions.navigate({
+      routeName: 'EndGame',
+      params: {winner: survivors},
+      action: NavigationActions.navigate({ routeName: 'EndGame' }),
+    });
+    dispatch(navigateAction)
     return;
   }
-
   const nextDay = {
     day: currentDay + 1,
     shift: 0,
@@ -90,7 +90,6 @@ export const killByWitch = (name) => (dispatch, getState) => {
   const updateState = setStatus(name, 'deadByWitch', days, currentDay)
 
   dispatch({type: 'WITCH_KILL', payload: updateState})
-  dispatch(nextOrder())
 }
 
 export const saveByWitch = (name) => (dispatch, getState) => {
@@ -99,7 +98,6 @@ export const saveByWitch = (name) => (dispatch, getState) => {
   const updateState = setStatus(name, 'saveByWitch', days, currentDay)
 
   dispatch({type: 'WITCH_SAVE', payload: updateState})
-  dispatch(nextOrder())
 }
 
 export const healByDoctor = (name) => (dispatch, getState) => {
@@ -126,6 +124,16 @@ export const killByPeople = (name) => (dispatch, getState) => {
 
   const updateState = setStatus(name, 'deadByPeople', days, currentDay)
   dispatch({type: 'PEOPLE_KILL', payload: updateState})
+  const noNextShift = checkResult(days)
+  if (typeof noNextShift == 'string') {
+    const navigateAction = NavigationActions.navigate({
+      routeName: 'EndGame',
+      params: {winner: noNextShift},
+      action: NavigationActions.navigate({ routeName: 'EndGame' }),
+    });
+    dispatch(navigateAction)
+    return;
+  }
   dispatch(changeShift())
 }
 
@@ -135,15 +143,7 @@ export const changeShift = () => (dispatch, getState) => {
   dispatch({type: 'CHANGE_SHIFT', payload: newShift})
 }
 
-export const toggleDiscussion = () => (dispatch, getState) => {
+export const toggleDiscussion = (status) => (dispatch, getState) => {
   let { discussion } = getState().game
-  if (discussion) {
-    dispatch({type: 'TOGGLE_VOTING', payload: true})
-  }
-  dispatch({type: 'TOGGLE_DISCUSSION', payload: !discussion})
-}
-
-export const toggleVoting = () => (dispatch, getState) => {
-  let { killingDiscussion } = getState().game
-  dispatch({type: 'TOGGLE_VOTING', payload: !killingDiscussion})
+  dispatch({type: 'TOGGLE_DISCUSSION', payload: status})
 }

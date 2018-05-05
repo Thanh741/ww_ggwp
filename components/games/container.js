@@ -10,7 +10,6 @@ const mapStateToProps = (state: Object) => ({
     order: state.game.order,
     clock: state.game.clock,
     discussion: state.game.discussion,
-    killingDiscussion: state.game.killingDiscussion,
     callOrder: state.game.callOrder,
     witchUseSave: state.game.witchUseSave,
     witchUseKill: state.game.witchUseKill,
